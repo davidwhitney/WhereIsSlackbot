@@ -6,7 +6,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using WhereIs.Slack;
 
 namespace WhereIs
 {
@@ -20,8 +23,22 @@ namespace WhereIs
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            
-            return new OkObjectResult($"The body was {requestBody}");
+            var payload = PayloadMapper.Map(requestBody);
+
+            var response = @"{
+    ""text"": ""I know where that is!"",
+    ""attachments"": [
+        {
+            ""text"":""Describing the image right here"",
+            ""image_url"": ""http://my-website.com/path/to/image.jpg"",
+        }
+    ]
+}";
+
+            var resp = new OkObjectResult(response);
+            resp.ContentTypes.Add(new MediaTypeHeaderValue("application/json"));
+
+            return resp;
         }
     }
 }
