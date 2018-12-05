@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace WhereIs
 {
-    public static class Function1
+    public static class Locate
     {
-        [FunctionName("Function1")]
+        [FunctionName("Locate")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
