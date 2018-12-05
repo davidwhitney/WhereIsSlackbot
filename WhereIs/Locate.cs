@@ -30,7 +30,7 @@ namespace WhereIs
     ""attachments"": [
         {
             ""text"":""Describing the image right here"",
-            ""image_url"": ""http://my-website.com/path/to/image.jpg"",
+            ""image_url"": ""http://my-website.com/path/to/image.jpg""
         }
     ]
 }";
