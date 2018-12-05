@@ -29,7 +29,7 @@ namespace WhereIs
                 attachments =
                 {
                     text = "Describing the image right here...",
-                    image_url = "http://my-website.com/path/to/image.jpg"
+                    image_url = "https://a.slack-edge.com/ae57/img/slack_api_logo.png"
                 }
             });
             resp.ContentTypes.Clear();
