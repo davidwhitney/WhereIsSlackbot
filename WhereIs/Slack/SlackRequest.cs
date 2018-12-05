@@ -1,6 +1,6 @@
 namespace WhereIs.Slack
 {
-    public class SlackPayload
+    public class SlackRequest
     {
         public string Token { get; set; }
         public string TeamId { get; set; }
