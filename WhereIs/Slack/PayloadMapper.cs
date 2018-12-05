@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace WhereIs.Slack
@@ -13,27 +14,35 @@ namespace WhereIs.Slack
 
             foreach (var prop in targetProperties)
             {
-                string normalisedProp = prop.Name;
-
-                for (var index = 1; index < normalisedProp.Length; index++)
+                var expectedKeyName = GenerateKeyName(prop);
+                if (!pairs.AllKeys.Contains(expectedKeyName))
                 {
-                    var letter = normalisedProp[index];
-                    if (char.IsUpper(letter))
-                    {
-                        normalisedProp = normalisedProp.Insert(index, "_");
-                        index++;
-                    }
+                    continue;
                 }
 
-                normalisedProp = normalisedProp.ToLower();
-
-                if (pairs.AllKeys.Contains(normalisedProp))
-                {
-                    prop.SetValue(instance, pairs[normalisedProp]);
-                }
+                prop.SetValue(instance, pairs[expectedKeyName]);
             }
 
             return instance;
+        }
+
+        private static string GenerateKeyName(MemberInfo prop)
+        {
+            var normalisedProp = prop.Name;
+
+            for (var index = 1; index < normalisedProp.Length; index++)
+            {
+                var letter = normalisedProp[index];
+                if (!char.IsUpper(letter))
+                {
+                    continue;
+                }
+
+                normalisedProp = normalisedProp.Insert(index, "_");
+                index++;
+            }
+
+            return normalisedProp.ToLower();
         }
     }
 }
