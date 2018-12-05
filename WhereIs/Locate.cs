@@ -36,6 +36,7 @@ namespace WhereIs
 }";
 
             var resp = new OkObjectResult(response);
+            resp.ContentTypes.Clear();
             resp.ContentTypes.Add(new MediaTypeHeaderValue("application/json"));
 
             return resp;
