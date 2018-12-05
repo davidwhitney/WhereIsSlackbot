@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -34,12 +35,35 @@ namespace WhereIs
         }
     ]
 }";
+            var json = new SlackResponse
+            {
+                text = "I know where that is!",
+                attachments =
+                {
+                    {
+                        "text", "Describing the image right here..."
+                    },
+                    {
+                        "image_url",
+                        "http://my-website.com/path/to/image.jpg"
+                    }
+                }
+            };
 
-            var resp = new OkObjectResult(response);
+            var asText = JsonConvert.SerializeObject(json);
+
+
+            var resp = new OkObjectResult(json);
             resp.ContentTypes.Clear();
             resp.ContentTypes.Add(new MediaTypeHeaderValue("application/json"));
 
             return resp;
         }
+    }
+
+    public class SlackResponse
+    {
+        public string text { get; set;}
+        public Dictionary<string, string> attachments { get; set; } = new Dictionary<string, string>();
     }
 }
