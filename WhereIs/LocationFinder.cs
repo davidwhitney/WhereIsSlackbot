@@ -13,16 +13,17 @@ namespace WhereIs
         {
             _locations = new List<Location>
             {
-                new Location
-                {
-                    Name = "Place that exists",
-                    Area = null
-                }
+                new Location { Name = "Place that exists" }
             };
         }
 
         public Location Find(string location)
         {
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                return Location.NotFound;
+            }
+
             var key = location.ToLower();
             var exactMatch = _locations.SingleOrDefault(x => x.Key == key);
             if (exactMatch != null)

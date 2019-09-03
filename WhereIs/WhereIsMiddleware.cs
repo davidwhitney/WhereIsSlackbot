@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using WhereIs.Slack;
 
 namespace WhereIs
@@ -12,7 +13,7 @@ namespace WhereIs
             var requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
             var request = PayloadMapper.Map(requestBody);
             var finder = new LocationFinder();
-            // var result = finder.Find("name", "area");
+            var result = finder.Find(request.Text);
 
             var slackResponse = new SlackResponse
             {
@@ -24,9 +25,8 @@ namespace WhereIs
                 }
             };
 
-
-            var greeting = "Hello";
-            await context.Response.WriteAsync(greeting);
+            var json = JsonConvert.SerializeObject(slackResponse);
+            await context.Response.WriteAsync(json);
         }
     }
 }

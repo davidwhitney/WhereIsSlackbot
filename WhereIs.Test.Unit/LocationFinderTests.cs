@@ -13,6 +13,16 @@ namespace WhereIs.Test.Unit
             _sut = new LocationFinder();
         }
 
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void Find_NullOrWhitespace_ReturnsErrorMessage(string searchTerm)
+        {
+            var result = _sut.Find(searchTerm);
+
+            Assert.That(result, Is.EqualTo(Location.NotFound));
+        }
+
         [Test]
         public void Find_PlaceDoesNotExist_ReturnsErrorMessage()
         {

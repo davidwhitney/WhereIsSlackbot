@@ -18,8 +18,13 @@ namespace WhereIs
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services) 
-            => services.AddTransient<WhereIsMiddleware>();
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) 
-            => app.UseMiddleware<WhereIsMiddleware>();
+            => services
+                .AddTransient<ImageServingMiddleware>()
+                .AddTransient<WhereIsMiddleware>();
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+            => app
+                .UseMiddleware<ImageServingMiddleware>()
+                .UseMiddleware<WhereIsMiddleware>();
     }
 }
