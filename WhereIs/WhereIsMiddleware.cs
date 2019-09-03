@@ -11,6 +11,8 @@ namespace WhereIs
         {
             var requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
             var request = PayloadMapper.Map(requestBody);
+            var finder = new LocationFinder();
+            // var result = finder.Find("name", "area");
 
             var slackResponse = new SlackResponse
             {
