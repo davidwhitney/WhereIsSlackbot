@@ -1,28 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs;
 using WhereIs.Slack;
 
 namespace WhereIs
 {
     public class WhereIsCommand
     {
+        private readonly SlackRequest _request;
+        private readonly LocationFinder _finder;
         private readonly UrlHelper _urlHelper;
 
-        public WhereIsCommand(UrlHelper urlHelper)
+        public WhereIsCommand(SlackRequest request, LocationFinder finder, UrlHelper urlHelper)
         {
+            _request = request;
+            _finder = finder;
             _urlHelper = urlHelper;
         }
 
-        public async Task<SlackResponse> Invoke(HttpRequest req)
+        public SlackResponse Invoke(HttpRequest req)
         {
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var request = PayloadMapper.Map(requestBody);
-            var finder = new LocationFinder();
-
-            var result = finder.Find(request.Text);
+            var result = _finder.Find(_request.Text);
             var imageUrl = _urlHelper.ImageFor(result.Key);
 
             return new SlackResponse
