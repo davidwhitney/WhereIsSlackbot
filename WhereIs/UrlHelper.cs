@@ -12,11 +12,11 @@ namespace WhereIs
         {
             if (context == null)
             {
-                throw new Exception("ExecutionContext is null");
+               // throw new Exception("ExecutionContext is null");
             }
 
             _config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
+                //.SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
