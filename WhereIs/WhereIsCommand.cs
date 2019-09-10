@@ -25,7 +25,7 @@ namespace WhereIs
                         text = "Describing the image right here...",
                         image_url = "https://a.slack-edge.com/ae57/img/slack_api_logo.png"
                     }
-                }
+                }.ToArray()
             };
         }
     }
