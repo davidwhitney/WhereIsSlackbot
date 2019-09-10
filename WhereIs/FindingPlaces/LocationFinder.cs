@@ -21,6 +21,11 @@ namespace WhereIs.FindingPlaces
         public LocationFinder(IEnumerable<Location> knownLocations)
         {
             _locations = (knownLocations ?? new List<Location>()).ToList();
+
+            if (_locations.Count == 0)
+            {
+                _locations.AddRange(HardcodedLocations.Items);
+            }
         }
 
         public Location Find(string location)
