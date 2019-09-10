@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace WhereIs
 {
@@ -13,7 +14,7 @@ namespace WhereIs
 
         public UrlHelper(IConfiguration config)
         {
-            _config = config;
+            _config = config ?? throw new Exception("Expected an instance of IConfiguration to be injected by the runtime.");
         }
 
         public string ForUrl(string functionName)

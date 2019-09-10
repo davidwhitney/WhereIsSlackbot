@@ -27,8 +27,7 @@ namespace WhereIs
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
             HttpRequest req,
-            ILogger log,
-            ExecutionContext context)
+            ILogger log)
         {
             try
             {
