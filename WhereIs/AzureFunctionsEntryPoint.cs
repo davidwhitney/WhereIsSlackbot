@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.IO;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,23 @@ namespace WhereIs
         [FunctionName("WhereIs")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ILogger log,
+            ExecutionContext context)
         {
-            var command = new WhereIsCommand();
+            var urlHelper = new UrlHelper(context);
+            var command = new WhereIsCommand(urlHelper);
             var response = await command.Invoke(req);
             return new JsonResult(response);
+        }
+
+        [FunctionName("Map")]
+        public static async Task<IActionResult> Map(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext context)
+        {
+            var bytes = File.ReadAllBytes("map.png");
+            return new FileContentResult(bytes, "	image/png");
         }
     }
 }
