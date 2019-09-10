@@ -64,7 +64,7 @@ namespace WhereIs.Commands
                 {
                     new SlackAttachment
                     {
-                        text = result.Key,
+                        text = imageUrl,
                         image_url = imageUrl
                     }
                 }.ToArray()

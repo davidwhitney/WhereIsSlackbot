@@ -12,7 +12,7 @@ namespace WhereIs.Commands
 {
     public class MapCommand
     {
-        [FunctionName("Map")]
+        [FunctionName(nameof(Map))]
         public async Task<IActionResult> Map(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
             HttpRequest req,
