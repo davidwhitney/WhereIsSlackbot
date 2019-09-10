@@ -5,14 +5,12 @@ namespace WhereIs
 {
     public class UrlHelper
     {
-        private readonly ExecutionContext _context;
-        private IConfigurationRoot _config;
+        private readonly IConfigurationRoot _config;
 
         public UrlHelper(ExecutionContext context)
         {
-            _context = context;
             _config = new ConfigurationBuilder()
-                .SetBasePath(_context.FunctionAppDirectory)
+                .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
