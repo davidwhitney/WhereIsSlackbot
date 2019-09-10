@@ -28,7 +28,7 @@ namespace WhereIs.Infrastructure
         public string ImageFor(string locationKey)
         {
             var imageUrl = ForUrl(nameof(MapCommand.Map));
-            return $"{imageUrl}&key={locationKey}";
+            return $"https://whereis.azurewebsites.net/api/Map?code=GaE17Cl8iaGFzbZN663XpI6/5L5lda8ANxeQi4YaZkwTawiTLwKISA==&key={locationKey}";
         }
     }
 }
