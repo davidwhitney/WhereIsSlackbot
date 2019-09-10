@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using WhereIs.FindingPlaces;
 
-namespace WhereIs.Test.Unit
+namespace WhereIs.Test.Unit.FindingPlaces
 {
     [TestFixture]
     public class LocationFinderTests

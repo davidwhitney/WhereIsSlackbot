@@ -28,7 +28,7 @@ namespace WhereIs.Infrastructure
         public string ImageFor(string locationKey)
         {
             var imageUrl = ForUrl(nameof(MapCommand.Map));
-            return $"{imageUrl}&{locationKey}";
+            return $"{imageUrl}&key={locationKey}";
         }
     }
 }

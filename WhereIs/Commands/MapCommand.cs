@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,8 @@ namespace WhereIs.Commands
         {
             try
             {
-                var bytes = File.ReadAllBytes("map.png");
+                var path = Path.Combine(context.FunctionAppDirectory, "map.png");
+                var bytes = File.ReadAllBytes(path);
                 return new FileContentResult(bytes, "	image/png");
             }
             catch (Exception ex)

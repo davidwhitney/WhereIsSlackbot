@@ -6,6 +6,7 @@ namespace WhereIs.FindingPlaces
     {
         public static List<Location> Items = new List<Location>
         {
+            new Location {Name = "Test"},
             new Location {Name = "Place that exists"}
         };
     }
