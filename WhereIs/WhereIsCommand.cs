@@ -12,10 +12,10 @@ namespace WhereIs
 {
     public class WhereIsCommand
     {
-        private readonly LocationFinder _finder;
-        private readonly UrlHelper _urlHelper;
+        private readonly ILocationFinder _finder;
+        private readonly IUrlHelper _urlHelper;
 
-        public WhereIsCommand(LocationFinder finder, UrlHelper urlHelper)
+        public WhereIsCommand(ILocationFinder finder, IUrlHelper urlHelper)
         {
             _finder = finder;
             _urlHelper = urlHelper;

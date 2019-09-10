@@ -4,7 +4,12 @@ using System.Linq;
 
 namespace WhereIs
 {
-    public class LocationFinder
+    public interface ILocationFinder
+    {
+        Location Find(string location);
+    }
+
+    public class LocationFinder : ILocationFinder
     {
         private readonly List<Location> _locations;
         private readonly int _percentageOfSpellingMistakeThatMatches = 25;

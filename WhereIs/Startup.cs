@@ -14,8 +14,8 @@ namespace WhereIs
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddTransient<UrlHelper, UrlHelper>();
-            builder.Services.AddTransient<LocationFinder, LocationFinder>();
+            builder.Services.AddTransient<IUrlHelper, UrlHelper>();
+            builder.Services.AddTransient<ILocationFinder, LocationFinder>();
         }
     }
 }

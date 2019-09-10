@@ -2,7 +2,12 @@
 
 namespace WhereIs
 {
-    public class UrlHelper
+    public interface IUrlHelper
+    {
+        string ImageFor(string locationKey);
+    }
+
+    public class UrlHelper : IUrlHelper
     {
         private readonly IConfiguration _config;
 
