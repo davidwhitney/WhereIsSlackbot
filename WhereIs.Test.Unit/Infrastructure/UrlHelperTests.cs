@@ -1,8 +1,8 @@
-﻿using Microsoft.Azure.WebJobs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WhereIs.Infrastructure;
+using WhereIs.Test.Unit.Fakes;
 
-namespace WhereIs.Test.Unit
+namespace WhereIs.Test.Unit.Infrastructure
 {
     [TestFixture]
     public class UrlHelperTests

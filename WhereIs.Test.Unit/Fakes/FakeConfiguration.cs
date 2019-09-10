@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 
-namespace WhereIs.Test.Unit
+namespace WhereIs.Test.Unit.Fakes
 {
     public class FakeConfiguration : Dictionary<string, string>, IConfiguration
     {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WhereIs.Commands;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 using WhereIs.Slack;
+using WhereIs.Test.Unit.Fakes;
 
-namespace WhereIs.Test.Unit
+namespace WhereIs.Test.Unit.Commands
 {
     [TestFixture]
     public class WhereIsCommandTests

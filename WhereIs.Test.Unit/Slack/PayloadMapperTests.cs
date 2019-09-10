@@ -5,7 +5,7 @@ using WhereIs.Slack;
 namespace WhereIs.Test.Unit
 {
     [TestFixture]
-    public class LocateTests
+    public class PayloadMapperTests
     {
         [Test]
         public void CanDeserializePayload()
