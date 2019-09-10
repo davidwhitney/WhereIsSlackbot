@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace WhereIs.Slack
 {
     public class SlackResponse
     {
         public string text { get; set; }
-        public SlackAttachments attachments { get; set; } = new SlackAttachments();
+        public List<SlackAttachments> attachments { get; set; } = new List<SlackAttachments>();
     }
 }
