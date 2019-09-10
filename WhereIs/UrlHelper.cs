@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using System;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 
 namespace WhereIs
@@ -9,6 +10,11 @@ namespace WhereIs
 
         public UrlHelper(ExecutionContext context)
         {
+            if (context == null)
+            {
+                throw new Exception("ExecutionContext is null");
+            }
+
             _config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
