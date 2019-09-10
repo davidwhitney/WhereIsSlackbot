@@ -1,25 +1,14 @@
-﻿using System;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace WhereIs
 {
     public class UrlHelper
     {
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
 
-        public UrlHelper(ExecutionContext context)
+        public UrlHelper(IConfiguration config)
         {
-            if (context == null)
-            {
-               // throw new Exception("ExecutionContext is null");
-            }
-
-            _config = new ConfigurationBuilder()
-                //.SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+            _config = config;
         }
 
         public string ForUrl(string functionName)

@@ -14,19 +14,8 @@ namespace WhereIs
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddTransient(provider =>
-            {
-                var executionContext = provider.GetService<ExecutionContext>();
-                return new ConfigurationBuilder()
-                    .SetBasePath(executionContext.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
-            });
-
-            builder.Services.AddTransient<UrlHelper>();
-            builder.Services.AddTransient<LocationFinder>();
-            builder.Services.AddTransient<WhereIsCommand>();
+            builder.Services.AddTransient<UrlHelper, UrlHelper>();
+            builder.Services.AddTransient<LocationFinder, LocationFinder>();
         }
     }
 }
