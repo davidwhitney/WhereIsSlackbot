@@ -25,7 +25,7 @@ namespace WhereIs
 
         public string ImageFor(string locationKey)
         {
-            var imageUrl = ForUrl(nameof(AzureFunctionsEntryPoint.Map));
+            var imageUrl = ForUrl(nameof(MapCommand.Map));
             return $"{imageUrl}&{locationKey}";
         }
     }

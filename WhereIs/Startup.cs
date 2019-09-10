@@ -24,14 +24,6 @@ namespace WhereIs
                     .Build();
             });
 
-            builder.Services.AddTransient(_ =>
-            {
-                var req = _.GetService<HttpRequest>();
-                var requestBody = new StreamReader(req.Body).ReadToEndAsync().GetAwaiter().GetResult();
-                var request = PayloadMapper.Map(requestBody);
-                return request;
-            });
-
             builder.Services.AddTransient<UrlHelper>();
             builder.Services.AddTransient<LocationFinder>();
             builder.Services.AddTransient<WhereIsCommand>();

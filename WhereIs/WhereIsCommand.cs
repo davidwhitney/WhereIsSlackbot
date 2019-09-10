@@ -1,25 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
 using WhereIs.Slack;
 
 namespace WhereIs
 {
     public class WhereIsCommand
     {
-        private readonly SlackRequest _request;
         private readonly LocationFinder _finder;
         private readonly UrlHelper _urlHelper;
 
-        public WhereIsCommand(SlackRequest request, LocationFinder finder, UrlHelper urlHelper)
+        public WhereIsCommand(LocationFinder finder, UrlHelper urlHelper)
         {
-            _request = request;
             _finder = finder;
             _urlHelper = urlHelper;
         }
 
-        public SlackResponse Invoke(HttpRequest req)
+        [FunctionName("WhereIs")]
+        public IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+            HttpRequest req,
+            ILogger log,
+            ExecutionContext context)
         {
-            var result = _finder.Find(_request.Text);
+            try
+            {
+                var requestBody = new StreamReader(req.Body).ReadToEndAsync().GetAwaiter().GetResult();
+                var request = PayloadMapper.Map(requestBody);
+
+                var response = Invoke(request);
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.ToString());
+                throw;
+            }
+        }
+
+        public SlackResponse Invoke(SlackRequest request)
+        {
+            var result = _finder.Find(request.Text);
             var imageUrl = _urlHelper.ImageFor(result.Key);
 
             return new SlackResponse

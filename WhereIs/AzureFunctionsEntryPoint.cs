@@ -9,34 +9,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace WhereIs
 {
-    public class AzureFunctionsEntryPoint
+    public class MapCommand
     {
-        private readonly WhereIsCommand _command;
-
-        public AzureFunctionsEntryPoint(WhereIsCommand whereIsCommand)
-        {
-            _command = whereIsCommand;
-        }
-
-        [FunctionName("WhereIs")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
-            HttpRequest req,
-            ILogger log,
-            ExecutionContext context)
-        {
-            try
-            {
-                var response = _command.Invoke(req);
-                return new JsonResult(response);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex.ToString());
-                throw;
-            }
-        }
-
         [FunctionName("Map")]
         public async Task<IActionResult> Map(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
