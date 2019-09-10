@@ -1,4 +1,4 @@
-﻿namespace WhereIs
+﻿namespace WhereIs.FindingPlaces
 {
     public class Location
     {

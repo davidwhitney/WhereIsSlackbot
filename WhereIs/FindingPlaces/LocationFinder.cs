@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WhereIs
+namespace WhereIs.FindingPlaces
 {
     public interface ILocationFinder
     {
@@ -14,12 +14,13 @@ namespace WhereIs
         private readonly List<Location> _locations;
         private readonly int _percentageOfSpellingMistakeThatMatches = 25;
 
-        public LocationFinder()
+        public LocationFinder() : this(HardcodedLocations.Items)
         {
-            _locations = new List<Location>
-            {
-                new Location { Name = "Place that exists" }
-            };
+        }
+
+        public LocationFinder(IEnumerable<Location> knownLocations)
+        {
+            _locations = (knownLocations ?? new List<Location>()).ToList();
         }
 
         public Location Find(string location)

@@ -1,10 +1,7 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
-using WhereIs.Slack;
+using WhereIs.FindingPlaces;
+using WhereIs.Infrastructure;
 
 [assembly: FunctionsStartup(typeof(WhereIs.Startup))]
 

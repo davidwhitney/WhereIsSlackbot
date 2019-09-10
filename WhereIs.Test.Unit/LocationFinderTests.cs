@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using WhereIs.FindingPlaces;
 
 namespace WhereIs.Test.Unit
 {

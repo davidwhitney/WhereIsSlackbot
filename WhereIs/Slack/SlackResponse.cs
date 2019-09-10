@@ -6,5 +6,11 @@ namespace WhereIs.Slack
     {
         public string text { get; set; }
         public SlackAttachment[] attachments { get; set; }
+
+        public SlackResponse()
+        {
+        }
+
+        public SlackResponse(string message) => text = message;
     }
 }

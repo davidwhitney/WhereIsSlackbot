@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using WhereIs.Commands;
 
-namespace WhereIs
+namespace WhereIs.Infrastructure
 {
     public interface IUrlHelper
     {

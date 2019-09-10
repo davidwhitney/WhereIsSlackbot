@@ -8,9 +8,12 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using WhereIs.FindingPlaces;
+using WhereIs.Infrastructure;
 using WhereIs.Slack;
+using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
 
-namespace WhereIs
+namespace WhereIs.Commands
 {
     public class WhereIsCommand
     {
@@ -19,8 +22,8 @@ namespace WhereIs
 
         public WhereIsCommand(ILocationFinder finder, IUrlHelper urlHelper, IConfiguration config)
         {
-            _finder = finder ?? new LocationFinder();
-            _urlHelper = urlHelper ?? new UrlHelper(config);
+            _finder = finder;
+            _urlHelper = urlHelper;
         }
 
         [FunctionName("WhereIs")]
@@ -47,11 +50,16 @@ namespace WhereIs
         public SlackResponse Invoke(SlackRequest request)
         {
             var result = _finder.Find(request.Text);
+            if (result == Location.NotFound)
+            {
+                return new SlackResponse("Sorry! We can't find that place either.");
+            }
+
             var imageUrl = _urlHelper.ImageFor(result.Key);
 
             return new SlackResponse
             {
-                text = "I know where that is!",
+                text = result.Name,
                 attachments = new List<SlackAttachment>
                 {
                     new SlackAttachment
