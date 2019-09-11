@@ -8,7 +8,8 @@ namespace WhereIs.FindingPlaces
         public LocationCollection Load(string appRoot)
         {
             var jsonPath = Path.Combine(appRoot, "App_Data", "locations.json");
-            return JsonConvert.DeserializeObject<LocationCollection>(jsonPath);
+            var contents = File.ReadAllText(jsonPath);
+            return JsonConvert.DeserializeObject<LocationCollection>(contents);
         }
     }
 }
