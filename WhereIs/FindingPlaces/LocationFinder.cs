@@ -4,11 +4,6 @@ using System.Linq;
 
 namespace WhereIs.FindingPlaces
 {
-    public interface ILocationFinder
-    {
-        Location Find(string location);
-    }
-
     public class LocationFinder : ILocationFinder
     {
         private readonly List<Location> _locations;

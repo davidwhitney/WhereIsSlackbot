@@ -33,6 +33,7 @@ namespace WhereIs.Commands
             try
             {
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                log.LogInformation(requestBody);
                 var request = PayloadMapper.Map(requestBody);
 
                 var response = Invoke(request);
