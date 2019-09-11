@@ -17,7 +17,7 @@ namespace WhereIs.Slack
             {
                 new SlackAttachment
                 {
-                    text = "The location you're looking for is here...",
+                    text = "The location you're looking for is here... " + imageUrl,
                     image_url = imageUrl
                 }
             }.ToArray();
