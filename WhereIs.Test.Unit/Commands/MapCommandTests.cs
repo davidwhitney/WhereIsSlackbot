@@ -28,7 +28,8 @@ namespace WhereIs.Test.Unit.Commands
             {
                 new Location("Foo", new ImageLocation(10, 10)),
                 new Location("Bar"),
-                new Location("Baz")
+                new Location("Baz"),
+                new Location("Aristotle", new ImageLocation(440, 105))
             };
             _ctx = new ExecutionContext {FunctionAppDirectory = Environment.CurrentDirectory};
             _sut = new MapCommand(_knownLocations);
