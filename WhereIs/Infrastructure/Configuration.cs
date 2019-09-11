@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WhereIs.Infrastructure
+﻿namespace WhereIs.Infrastructure
 {
     public class Configuration
     {

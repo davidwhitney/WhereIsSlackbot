@@ -17,11 +17,11 @@ namespace WhereIs.Commands
 {
     public class MapCommand
     {
-        private readonly LocationCollection _locations;
+        private readonly ILocationRepository _locationRepository;
 
-        public MapCommand(LocationCollection locations)
+        public MapCommand(ILocationRepository locationRepository)
         {
-            _locations = locations;
+            _locationRepository = locationRepository;
         }
 
         [FunctionName(nameof(Map))]
@@ -39,13 +39,14 @@ namespace WhereIs.Commands
                     return new NotFoundResult();
                 }
 
-                var location = _locations.SingleOrDefault(x => x.Key == mapKey);
+                var known = _locationRepository.Load(context.FunctionAppDirectory);
+                var location = known.SingleOrDefault(x => x.Key == mapKey);
                 if (location == null)
                 {
                     return new NotFoundResult();
                 }
 
-                var map = Path.Combine(context.FunctionAppDirectory, $"{location.ImageLocation.Map}.png");
+                var map = Path.Combine(context.FunctionAppDirectory, "App_Data", "Maps", $"{location.ImageLocation.Map}.png");
                 var outputBytes = HighlightAreaInImage(map, location);
 
                 return new FileContentResult(outputBytes, "image/jpeg")

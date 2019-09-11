@@ -2,6 +2,6 @@
 {
     public interface ILocationFinder
     {
-        Location Find(string location);
+        Location Find(string location, string appRoot);
     }
 }

@@ -27,6 +27,7 @@ namespace WhereIs.Commands
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
             HttpRequest req,
+            ExecutionContext context,
             ILogger log)
         {
             try
@@ -34,7 +35,7 @@ namespace WhereIs.Commands
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var request = PayloadMapper.Map<SlackRequest>(requestBody);
 
-                var result = _finder.Find(request.Text);
+                var result = _finder.Find(request.Text, context.FunctionAppDirectory);
                 if (result.IsNotFound())
                 {
                     return new SlackResponse("Sorry! We can't find that place either.").AsJson();

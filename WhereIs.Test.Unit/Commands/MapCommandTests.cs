@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using WhereIs.Commands;
 using WhereIs.FindingPlaces;
@@ -32,7 +33,7 @@ namespace WhereIs.Test.Unit.Commands
                 new Location("Aristotle", new ImageLocation(440, 105))
             };
             _ctx = new ExecutionContext {FunctionAppDirectory = Environment.CurrentDirectory};
-            _sut = new MapCommand(_knownLocations);
+            _sut = new MapCommand(new FakeLocationRepository(_knownLocations));
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public async Task Invoke_ForKnownKey_ReturnsModifiedImage()
         {
-            var path = Path.Combine(_ctx.FunctionAppDirectory, "map.png");
+            var path = Path.Combine(_ctx.FunctionAppDirectory, "App_Data", "Maps", "map.png");
             var defaultMap = File.ReadAllBytes(path);
             var request = ExpectedRequests.MapRequestForKey("foo");
 

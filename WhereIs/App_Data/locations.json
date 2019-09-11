@@ -1,0 +1,98 @@
+﻿[
+  {
+    "Name": "Ben Jones",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 300,
+      "Y": 105
+    }
+  },
+  {
+    "Name": "David Whitney",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 220,
+      "Y": 240
+    }
+  },
+  {
+    "Name": "Plato",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 386,
+      "Y": 105
+    }
+  },
+  {
+    "Name": "Aristotle",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 440,
+      "Y": 105
+    }
+  },
+  {
+    "Name": "Locke",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 488,
+      "Y": 105
+    }
+  },
+  {
+    "Name": "Kitchen",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 590,
+      "Y": 325
+    }
+  },
+  {
+    "Name": "Open Space",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 400,
+      "Y": 575
+    }
+  },
+  {
+    "Name": "Austen",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 335,
+      "Y": 700
+    }
+  },
+  {
+    "Name": "Shakespeare",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 585,
+      "Y": 795
+    }
+  },
+  {
+    "Name": "Freud",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 475,
+      "Y": 700
+    }
+  },
+  {
+    "Name": "Socrates",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 450,
+      "Y": 795
+    }
+  },
+  {
+    "Name": "Cavendish",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 400,
+      "Y": 695
+    }
+  }
+]
