@@ -13,12 +13,12 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [SetUp]
         public void Setup()
         {
-            _sut = new LocationFinder(new FakeLocationRepository(new LocationCollection
+            _sut = new LocationFinder(new LocationCollection
             {
                 new Location("one"),
                 new Location("Place that exists"),
                 new Location("two")
-            }));
+            });
         }
 
         [TestCase("")]
@@ -26,7 +26,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [TestCase(null)]
         public void Find_NullOrWhitespace_ReturnsErrorMessage(string searchTerm)
         {
-            var result = _sut.Find(searchTerm, Environment.CurrentDirectory);
+            var result = _sut.Find(searchTerm);
 
             Assert.That(result, Is.EqualTo(Location.NotFound));
         }
@@ -34,7 +34,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Find_PlaceDoesNotExist_ReturnsErrorMessage()
         {
-            var result = _sut.Find("junk-place", Environment.CurrentDirectory);
+            var result = _sut.Find("junk-place");
 
             Assert.That(result, Is.EqualTo(Location.NotFound));
         }
@@ -42,7 +42,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Find_PlaceKnown_ReturnsNotNullLocationResult()
         {
-            var result = _sut.Find("Place that exists", Environment.CurrentDirectory);
+            var result = _sut.Find("Place that exists");
 
             Assert.That(result, Is.InstanceOf<Location>());
             Assert.That(result, Is.Not.EqualTo(Location.NotFound));
@@ -51,7 +51,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Find_PlaceKnown_LocationResultContainsLocation()
         {
-            var result = _sut.Find("Place that exists", Environment.CurrentDirectory);
+            var result = _sut.Find("Place that exists");
 
             Assert.That(result.Name, Is.EqualTo("Place that exists"));
         }
@@ -59,7 +59,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Find_PlaceKnown_IgnoresCase()
         {
-            var result = _sut.Find("place tHat exists", Environment.CurrentDirectory);
+            var result = _sut.Find("place tHat exists");
 
             Assert.That(result.Name, Is.EqualTo("Place that exists"));
         }
@@ -70,7 +70,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [TestCase("place tcbh cxists")]
         public void Find_FindingAMisspellingOfAKnownPlace_SuggestsMatchesWhenNoExactMatchIsPresent(string supportedMisspelling)
         {
-            var result = _sut.Find(supportedMisspelling, Environment.CurrentDirectory);
+            var result = _sut.Find(supportedMisspelling);
 
             Assert.That(result.Name, Is.EqualTo("Place that exists"));
         }
@@ -78,7 +78,7 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Find_AllFuzzySpellingsTooDifferent_ReturnsNotFound()
         {
-            var result = _sut.Find("place tcbh cxasts", Environment.CurrentDirectory);
+            var result = _sut.Find("place tcbh cxasts");
 
             Assert.That(result, Is.EqualTo(Location.NotFound));
         }

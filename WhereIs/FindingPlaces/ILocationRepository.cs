@@ -2,6 +2,6 @@
 {
     public interface ILocationRepository
     {
-        LocationCollection Load(string appRoot);
+        LocationCollection Load();
     }
 }

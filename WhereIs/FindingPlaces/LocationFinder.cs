@@ -5,31 +5,29 @@ namespace WhereIs.FindingPlaces
 {
     public class LocationFinder : ILocationFinder
     {
-        private readonly ILocationRepository _repository;
+        private readonly LocationCollection _locations;
         private const int PercentageToleranceForMisspellings = 25;
 
-        public LocationFinder(ILocationRepository repository)
+        public LocationFinder(LocationCollection locations)
         {
-            _repository = repository;
+            _locations = locations;
         }
 
-        public Location Find(string location, string appRoot)
+        public Location Find(string location)
         {
             if (string.IsNullOrWhiteSpace(location))
             {
                 return Location.NotFound;
             }
 
-            var locations = _repository.Load(appRoot);
-
             var key = location.ToLower();
-            var exactMatch = locations.SingleOrDefault(x => x.Key == key);
+            var exactMatch = _locations.SingleOrDefault(x => x.Key == key);
             if (exactMatch != null)
             {
                 return exactMatch;  
             }
 
-            var (nearest, distance) = ReturnNearestSpellingMatch(key, locations);
+            var (nearest, distance) = ReturnNearestSpellingMatch(key);
 
             var maxDistance = (double)nearest.Key.Length / 100 * PercentageToleranceForMisspellings;
             var roundedDistance = Math.Round(maxDistance, MidpointRounding.AwayFromZero);
@@ -39,16 +37,16 @@ namespace WhereIs.FindingPlaces
                 : Location.NotFound;
         }
 
-        private static Tuple<Location, int> ReturnNearestSpellingMatch(string key, LocationCollection locations)
+        private Tuple<Location, int> ReturnNearestSpellingMatch(string key)
         {
-            var distances = locations.Select(x => new
+            var distances = _locations.Select(x => new
             {
                 x.Key,
                 Distance = LevenshteinDistance(x.Key, key)
             }).OrderBy(x => x.Distance);
 
             return new Tuple<Location, int>(
-                locations.Single(x => x.Key == distances.First().Key),
+                _locations.Single(x => x.Key == distances.First().Key),
                 distances.First().Distance);
         }
 

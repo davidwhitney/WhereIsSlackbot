@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,18 +9,17 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using WhereIs.FindingPlaces;
 
 namespace WhereIs.Commands
 {
     public class MapCommand
     {
-        private readonly ILocationRepository _locationRepository;
+        private readonly LocationCollection _locations;
 
-        public MapCommand(ILocationRepository locationRepository)
+        public MapCommand(LocationCollection locations)
         {
-            _locationRepository = locationRepository;
+            _locations = locations;
         }
 
         [FunctionName(nameof(Map))]
@@ -39,8 +37,7 @@ namespace WhereIs.Commands
                     return new NotFoundResult();
                 }
 
-                var known = _locationRepository.Load(context.FunctionAppDirectory);
-                var location = known.SingleOrDefault(x => x.Key == mapKey);
+                var location = _locations.SingleOrDefault(x => x.Key == mapKey);
                 if (location == null)
                 {
                     return new NotFoundResult();

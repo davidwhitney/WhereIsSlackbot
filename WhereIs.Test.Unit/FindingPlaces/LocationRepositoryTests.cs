@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
 
@@ -12,9 +10,9 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [Test]
         public void Load_WithCorrectPath_CanDeserializeItems()
         {
-            var sut = new LocationRepository();
+            var sut = new LocationRepository(Environment.CurrentDirectory);
 
-            var items = sut.Load(Environment.CurrentDirectory);
+            var items = sut.Load();
 
             Assert.That(items, Is.Not.Null);
         }

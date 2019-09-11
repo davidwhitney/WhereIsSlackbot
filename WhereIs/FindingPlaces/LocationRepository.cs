@@ -5,9 +5,12 @@ namespace WhereIs.FindingPlaces
 {
     public class LocationRepository : ILocationRepository
     {
-        public LocationCollection Load(string appRoot)
+        private readonly string _appRoot;
+        public LocationRepository(string appRoot) => _appRoot = appRoot;
+
+        public LocationCollection Load()
         {
-            var jsonPath = Path.Combine(appRoot, "App_Data", "locations.json");
+            var jsonPath = Path.Combine(_appRoot, "App_Data", "locations.json");
             var contents = File.ReadAllText(jsonPath);
             return JsonConvert.DeserializeObject<LocationCollection>(contents);
         }

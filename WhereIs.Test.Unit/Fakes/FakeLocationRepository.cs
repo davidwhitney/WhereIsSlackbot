@@ -6,6 +6,6 @@ namespace WhereIs.Test.Unit.Fakes
     {
         private readonly LocationCollection _returnThese;
         public FakeLocationRepository(LocationCollection returnThese) => _returnThese = returnThese;
-        public LocationCollection Load(string appRoot) => _returnThese;
+        public LocationCollection Load() => _returnThese;
     }
 }

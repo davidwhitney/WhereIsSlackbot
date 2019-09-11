@@ -35,7 +35,7 @@ namespace WhereIs.Commands
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var request = PayloadMapper.Map<SlackRequest>(requestBody);
 
-                var result = _finder.Find(request.Text, context.FunctionAppDirectory);
+                var result = _finder.Find(request.Text);
                 if (result.IsNotFound())
                 {
                     return new SlackResponse("Sorry! We can't find that place either.").AsJson();

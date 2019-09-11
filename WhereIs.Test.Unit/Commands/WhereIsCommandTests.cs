@@ -30,7 +30,7 @@ namespace WhereIs.Test.Unit.Commands
                 new Location("Baz")
             };
             
-            _sut = new WhereIsCommand(new LocationFinder(new FakeLocationRepository(_knownLocations)),
+            _sut = new WhereIsCommand(new LocationFinder(_knownLocations),
                 new UrlHelper(new Configuration {UrlRoot = "https://localhost/api", ApiKey = "key123"}));
         }
 

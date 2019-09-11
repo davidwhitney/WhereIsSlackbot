@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 
@@ -16,9 +15,14 @@ namespace WhereIs
             var urlRoot = Environment.GetEnvironmentVariable("UrlRoot");
             var apiKey = Environment.GetEnvironmentVariable("ApiKey");
 
+            var localRoot = Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot");
+            var azureRoot = $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot";
+            var actualRoot = localRoot ?? azureRoot;
+
             builder.Services.AddSingleton(_ => new Configuration {ApiKey = apiKey, UrlRoot = urlRoot});
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
-            builder.Services.AddTransient<ILocationRepository, LocationRepository>();
+            builder.Services.AddSingleton<ILocationRepository>(_ => new LocationRepository(actualRoot));
+            builder.Services.AddSingleton(_ => _.GetService<ILocationRepository>().Load());
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
         }
     }

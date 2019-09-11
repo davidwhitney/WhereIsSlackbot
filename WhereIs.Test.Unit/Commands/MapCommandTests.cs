@@ -33,7 +33,7 @@ namespace WhereIs.Test.Unit.Commands
                 new Location("Aristotle", new ImageLocation(440, 105))
             };
             _ctx = new ExecutionContext {FunctionAppDirectory = Environment.CurrentDirectory};
-            _sut = new MapCommand(new FakeLocationRepository(_knownLocations));
+            _sut = new MapCommand(_knownLocations);
         }
 
         [Test]
