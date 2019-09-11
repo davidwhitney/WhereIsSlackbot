@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using WhereIs.Infrastructure;
-using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit.Infrastructure
 {
@@ -10,7 +9,7 @@ namespace WhereIs.Test.Unit.Infrastructure
         [Test]
         public void UrlFor_GivenMethodName_ConstructsKeydUri()
         {
-            var helper = new UrlHelper(new FakeConfiguration());
+            var helper = new UrlHelper(new Configuration{UrlRoot = "https://localhost/api", ApiKey = "key123"});
 
             var url = helper.ForUrl("foo");
 

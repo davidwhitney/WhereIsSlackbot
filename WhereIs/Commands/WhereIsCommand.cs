@@ -33,10 +33,8 @@ namespace WhereIs.Commands
             try
             {
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                log.LogInformation(requestBody);
                 var request = PayloadMapper.Map(requestBody);
-
-                var response = Invoke(request);
+                var response = ProcessRequest(request);
                 return new JsonResult(response);
             }
             catch (Exception ex)
@@ -46,7 +44,7 @@ namespace WhereIs.Commands
             }
         }
 
-        public SlackResponse Invoke(SlackRequest request)
+        private SlackResponse ProcessRequest(SlackRequest request)
         {
             var result = _finder.Find(request.Text);
             if (result == Location.NotFound)
@@ -63,7 +61,7 @@ namespace WhereIs.Commands
                 {
                     new SlackAttachment
                     {
-                        text = imageUrl,
+                        text = "The location you're looking for is here...",
                         image_url = imageUrl
                     }
                 }.ToArray()
