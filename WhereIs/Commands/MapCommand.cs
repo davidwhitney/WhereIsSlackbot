@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using WhereIs.FindingPlaces;
 
 namespace WhereIs.Commands
@@ -60,30 +62,23 @@ namespace WhereIs.Commands
 
         private static byte[] HighlightAreaInImage(string path, Location location)
         {
-            var rawMap = (Bitmap) Image.FromFile(path);
-            
-            DrawHighlight(location, rawMap);
-
-            using (var imgStream = new MemoryStream())
+            using (var rawMap = Image.Load<Rgba32>(path))
             {
-                var jpgEncoder = ImageCodecInfo.GetImageDecoders().FirstOrDefault(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+                
+                DrawHighlight(location, rawMap);
 
-                // Create an Encoder object based on the GUID  
-                // for the Quality parameter category.  
-                var myEncoder = Encoder.Quality;
-                var myEncoderParameters = new EncoderParameters(1);
-                var myEncoderParameter = new EncoderParameter(myEncoder, 80L);
-                myEncoderParameters.Param[0] = myEncoderParameter;
-
-                rawMap.Save(imgStream, jpgEncoder, myEncoderParameters);
-                imgStream.Position = 0;
-                var outputBytes = imgStream.GetBuffer();
-                imgStream.Close();
-                return outputBytes;
+                using (var imgStream = new MemoryStream())
+                {
+                    rawMap.SaveAsJpeg(imgStream);
+                    imgStream.Position = 0;
+                    var outputBytes = imgStream.GetBuffer();
+                    imgStream.Close();
+                    return outputBytes;
+                }
             }
         }
 
-        private static void DrawHighlight(Location location, Bitmap rawMap)
+        private static void DrawHighlight(Location location, Image<Rgba32> rawMap)
         {
             const int sizeOfHighlight = 10;
 
@@ -97,7 +92,7 @@ namespace WhereIs.Commands
             {
                 foreach (var y in yRange)
                 {
-                    rawMap.SetPixel(x, y, Color.Red);
+                    rawMap[x, y] = Rgba32.Red;
                 }
             }
         }

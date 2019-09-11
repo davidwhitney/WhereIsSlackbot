@@ -45,7 +45,7 @@ namespace WhereIs.Test.Unit.Commands
         }
 
         [Test]
-        public async Task Invoke_ForKnownKey_ReturnsPng()
+        public async Task Invoke_ForKnownKey_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
