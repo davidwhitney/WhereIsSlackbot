@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
@@ -11,6 +12,10 @@ namespace WhereIs
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var urlRoot = Environment.GetEnvironmentVariable("UrlRoot");
+            var apiKey = Environment.GetEnvironmentVariable("ApiKey");
+
+            builder.Services.AddSingleton(_ => new Configuration {ApiKey = apiKey, UrlRoot = urlRoot});
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
         }

@@ -11,24 +11,20 @@ namespace WhereIs.Infrastructure
 
     public class UrlHelper : IUrlHelper
     {
-        private readonly IConfiguration _config;
+        private readonly Configuration _config;
 
-        public UrlHelper(IConfiguration config)
+        public UrlHelper(Configuration config)
         {
-            _config = config ?? throw new Exception("Expected an instance of IConfiguration to be injected by the runtime.");
+            _config = config ?? throw new Exception("Expected an instance of Configuration to be injected by the runtime.");
         }
+
+        public string ImageFor(string locationKey) => $"{ForUrl(nameof(MapCommand.Map))}&key={locationKey}";
 
         public string ForUrl(string functionName)
         {
-            var apiKey = _config["Values:ApiKey"];
-            var apiRoot = _config["Values:UrlRoot"];
+            var apiKey = _config.ApiKey;
+            var apiRoot = _config.UrlRoot;
             return $"{apiRoot}/{functionName}?code={apiKey}";
-        }
-
-        public string ImageFor(string locationKey)
-        {
-            var imageUrl = ForUrl(nameof(MapCommand.Map));
-            return $"https://whereis.azurewebsites.net/api/Map?code=GaE17Cl8iaGFzbZN663XpI6/5L5lda8ANxeQi4YaZkwTawiTLwKISA==&key={locationKey}";
         }
     }
 }

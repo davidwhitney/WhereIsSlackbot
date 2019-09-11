@@ -12,7 +12,7 @@ namespace WhereIs.FindingPlaces
     public class LocationFinder : ILocationFinder
     {
         private readonly List<Location> _locations;
-        private readonly int _percentageOfSpellingMistakeThatMatches = 25;
+        private const int PercentageToleranceForMisspellings = 25;
 
         public LocationFinder() : this(HardcodedLocations.Items)
         {
@@ -43,9 +43,10 @@ namespace WhereIs.FindingPlaces
             }
 
             var (nearest, distance) = ReturnNearestSpellingMatch(key);
-            var percentageDifferent = 100 - (int)Math.Round((double)(100 * (nearest.Key.Length - distance)) / nearest.Key.Length);
 
-            return percentageDifferent < _percentageOfSpellingMistakeThatMatches
+            var maxDistance = (double)nearest.Key.Length / 100 * PercentageToleranceForMisspellings;
+
+            return distance < maxDistance
                 ? nearest
                 : Location.NotFound;
         }
@@ -59,8 +60,8 @@ namespace WhereIs.FindingPlaces
             }).OrderBy(x => x.Distance);
 
             return new Tuple<Location, int>(
-                _locations.Single(x => x.Key == distances.Last().Key),
-                distances.Last().Distance);
+                _locations.Single(x => x.Key == distances.First().Key),
+                distances.First().Distance);
         }
 
         /// <summary>

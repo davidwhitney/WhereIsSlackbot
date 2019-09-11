@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WhereIs.FindingPlaces;
-using WhereIs.Infrastructure;
 using WhereIs.Slack;
 using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
 
@@ -20,7 +18,7 @@ namespace WhereIs.Commands
         private readonly ILocationFinder _finder;
         private readonly IUrlHelper _urlHelper;
 
-        public WhereIsCommand(ILocationFinder finder, IUrlHelper urlHelper, IConfiguration config)
+        public WhereIsCommand(ILocationFinder finder, IUrlHelper urlHelper)
         {
             _finder = finder;
             _urlHelper = urlHelper;
