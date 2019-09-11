@@ -46,7 +46,7 @@ namespace WhereIs.Commands
                 var map = Path.Combine(context.FunctionAppDirectory, $"{location.ImageLocation.Map}.png");
                 var outputBytes = HighlightAreaInImage(map, location);
 
-                return new FileContentResult(outputBytes, "	image/png");
+                return new FileContentResult(outputBytes, "	image/jpeg");
             }
             catch (Exception ex)
             {
@@ -63,7 +63,16 @@ namespace WhereIs.Commands
 
             using (var imgStream = new MemoryStream())
             {
-                rawMap.Save(imgStream, ImageFormat.Png);
+                var jpgEncoder = ImageCodecInfo.GetImageDecoders().FirstOrDefault(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+
+                // Create an Encoder object based on the GUID  
+                // for the Quality parameter category.  
+                var myEncoder = Encoder.Quality;
+                var myEncoderParameters = new EncoderParameters(1);
+                var myEncoderParameter = new EncoderParameter(myEncoder, 80L);
+                myEncoderParameters.Param[0] = myEncoderParameter;
+
+                rawMap.Save(imgStream, jpgEncoder, myEncoderParameters);
                 imgStream.Position = 0;
                 var outputBytes = imgStream.GetBuffer();
                 imgStream.Close();

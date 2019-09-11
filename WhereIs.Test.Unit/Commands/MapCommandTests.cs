@@ -51,7 +51,7 @@ namespace WhereIs.Test.Unit.Commands
 
             var response = await _sut.Map(request, _logger, _ctx).AsFile();
 
-            Assert.That(response.ContentType, Is.EqualTo("image/png"));
+            Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace WhereIs.Test.Unit.Commands
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(10, 10);
-            Assert.That(pixel.Name, Is.EqualTo("ffff0000"));
+            Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
         }
 
         [Test]
@@ -87,7 +87,11 @@ namespace WhereIs.Test.Unit.Commands
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(7, 7);
-            Assert.That(pixel.Name, Is.EqualTo("ffff0000"));
+            Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
+
+            var temp = Path.GetTempFileName();
+            File.WriteAllBytes(temp, response.FileContents);
+            Console.WriteLine(temp);
         }
     }
 }
