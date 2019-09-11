@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -34,38 +33,22 @@ namespace WhereIs.Commands
             {
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var request = PayloadMapper.Map(requestBody);
-                var response = ProcessRequest(request);
-                return new JsonResult(response);
+
+                var result = _finder.Find(request.Text);
+                if (result.IsNotFound())
+                {
+                    return new SlackResponse("Sorry! We can't find that place either.").AsJson();
+                }
+
+                var imageUrl = _urlHelper.ImageFor(result.Key);
+
+                return new SlackResponse(result, imageUrl).AsJson();
             }
             catch (Exception ex)
             {
                 log.LogError(ex.ToString());
                 throw;
             }
-        }
-
-        private SlackResponse ProcessRequest(SlackRequest request)
-        {
-            var result = _finder.Find(request.Text);
-            if (result == Location.NotFound)
-            {
-                return new SlackResponse("Sorry! We can't find that place either.");
-            }
-
-            var imageUrl = _urlHelper.ImageFor(result.Key);
-
-            return new SlackResponse
-            {
-                text = result.Name,
-                attachments = new List<SlackAttachment>
-                {
-                    new SlackAttachment
-                    {
-                        text = "The location you're looking for is here...",
-                        image_url = imageUrl
-                    }
-                }.ToArray()
-            };
         }
     }
 }
