@@ -40,8 +40,9 @@ namespace WhereIs.FindingPlaces
             var (nearest, distance) = ReturnNearestSpellingMatch(key);
 
             var maxDistance = (double)nearest.Key.Length / 100 * PercentageToleranceForMisspellings;
+            var roundedDistance = Math.Round(maxDistance, MidpointRounding.AwayFromZero);
 
-            return distance < maxDistance
+            return distance <= roundedDistance
                 ? nearest
                 : Location.NotFound;
         }

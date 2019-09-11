@@ -60,5 +60,15 @@ namespace WhereIs.Test.Unit.Commands
 
             Assert.That(response.attachments[0].image_url, Is.EqualTo("https://localhost/api/Map?code=key123&key=foo"));
         }
+
+        [Test]
+        public async Task Invoke_MisspeltLocation_ReturnsLocation()
+        {
+            var request = SlackWebHookRequest.WithText("Fop");
+
+            var response = await _sut.Run(request, _logger).AsSlackResponse();
+
+            Assert.That(response.text, Is.EqualTo("Foo"));
+        }
     }
 }
