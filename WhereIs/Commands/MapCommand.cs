@@ -64,23 +64,26 @@ namespace WhereIs.Commands
         {
             using (var rawMap = Image.Load<Rgba32>(path))
             {
-                
                 DrawHighlight(location, rawMap);
+                return GetBytesForModifiedImage(rawMap);
+            }
+        }
 
-                using (var imgStream = new MemoryStream())
-                {
-                    rawMap.SaveAsJpeg(imgStream);
-                    imgStream.Position = 0;
-                    var outputBytes = imgStream.GetBuffer();
-                    imgStream.Close();
-                    return outputBytes;
-                }
+        private static byte[] GetBytesForModifiedImage(Image rawMap)
+        {
+            using (var imgStream = new MemoryStream())
+            {
+                rawMap.SaveAsJpeg(imgStream);
+                imgStream.Position = 0;
+                var outputBytes = imgStream.GetBuffer();
+                imgStream.Close();
+                return outputBytes;
             }
         }
 
         private static void DrawHighlight(Location location, Image<Rgba32> rawMap)
         {
-            const int sizeOfHighlight = 10;
+            const int sizeOfHighlight = 20;
 
             var xRange = Enumerable.Range(location.ImageLocation.X - sizeOfHighlight, sizeOfHighlight * 2).ToList();
             var yRange = Enumerable.Range(location.ImageLocation.Y - sizeOfHighlight, sizeOfHighlight * 2).ToList();
