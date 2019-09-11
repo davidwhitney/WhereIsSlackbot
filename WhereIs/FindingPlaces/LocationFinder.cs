@@ -26,7 +26,7 @@ namespace WhereIs.FindingPlaces
             var exactMatch = locations.SingleOrDefault(x => x.Key == key);
             if (exactMatch != null)
             {
-                return exactMatch;
+                return exactMatch;  
             }
 
             var (nearest, distance) = ReturnNearestSpellingMatch(key, locations);

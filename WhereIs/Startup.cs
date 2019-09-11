@@ -18,6 +18,7 @@ namespace WhereIs
 
             builder.Services.AddSingleton(_ => new Configuration {ApiKey = apiKey, UrlRoot = urlRoot});
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
+            builder.Services.AddTransient<ILocationRepository, LocationRepository>();
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
         }
     }
