@@ -6,11 +6,11 @@ namespace WhereIs.Slack
 {
     public static class PayloadMapper
     {
-        public static SlackRequest Map(string payload)
+        public static TRequestType Map<TRequestType>(string payload) where TRequestType : new()
         {
             var pairs = HttpUtility.ParseQueryString("?" + payload);
-            var instance = new SlackRequest();
-            var targetProperties = typeof(SlackRequest).GetProperties();
+            var instance = new TRequestType();
+            var targetProperties = typeof(TRequestType).GetProperties();
 
             foreach (var prop in targetProperties)
             {

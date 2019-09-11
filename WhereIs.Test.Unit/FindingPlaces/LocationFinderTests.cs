@@ -11,7 +11,12 @@ namespace WhereIs.Test.Unit.FindingPlaces
         [SetUp]
         public void Setup()
         {
-            _sut = new LocationFinder();
+            _sut = new LocationFinder(new LocationCollection
+            {
+                new Location("one"),
+                new Location("Place that exists"),
+                new Location("two")
+            });
         }
 
         [TestCase("")]

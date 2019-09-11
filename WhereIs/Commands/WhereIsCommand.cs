@@ -32,7 +32,7 @@ namespace WhereIs.Commands
             try
             {
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var request = PayloadMapper.Map(requestBody);
+                var request = PayloadMapper.Map<SlackRequest>(requestBody);
 
                 var result = _finder.Find(request.Text);
                 if (result.IsNotFound())

@@ -16,7 +16,7 @@ namespace WhereIs.Test.Unit
                                    "command=%2Fwhereis&text=david" +
                                    "&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTEM9Z8ZU6%2F495994816658%2Fw7dustPvf1OcLQBxlE7p7Zry&trigger_id=495826548660.497339305958.4248e2d037959185626c79146a32eace";
 
-            var result = PayloadMapper.Map(payload);
+            var result = PayloadMapper.Map<SlackRequest>(payload);
 
             Assert.That(result.Token, Is.EqualTo("UPB5sDjFlKyzqRAX0SPO44fm"));
             Assert.That(result.TeamId, Is.EqualTo("TEM9Z8ZU6"));

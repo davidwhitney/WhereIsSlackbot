@@ -2,9 +2,9 @@
 
 namespace WhereIs.FindingPlaces
 {
-    public static class HardcodedLocations
+    public class LocationCollection : List<Location>
     {
-        public static List<Location> Items = new List<Location>
+        public static LocationCollection Defaults = new LocationCollection
         {
             new Location {Name = "Test"},
             new Location {Name = "Place that exists"},

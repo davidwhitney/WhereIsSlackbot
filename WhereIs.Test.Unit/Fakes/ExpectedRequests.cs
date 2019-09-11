@@ -1,13 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Primitives;
 
 namespace WhereIs.Test.Unit.Fakes
 {
-    public class SlackWebHookRequest
+    public class ExpectedRequests
     {
-        public static DefaultHttpRequest WithText(string text, string command = "/whereis")
+        public static DefaultHttpRequest WhereIsFor(string text, string command = "/whereis")
         {
             var encodedText = HttpUtility.UrlEncode(text);
             var encodedCommand = HttpUtility.UrlEncode(command)?.Replace("%2f", "/"); // Slack is weird.
@@ -23,6 +25,18 @@ namespace WhereIs.Test.Unit.Fakes
             {
                 Query = new QueryCollection(),
                 Body = stream
+            };
+        }
+
+        public static DefaultHttpRequest MapRequestForKey(string key)
+        {
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Query = new QueryCollection(new Dictionary<string, StringValues>
+                {
+                    {"code", new StringValues("someApiKey")},
+                    {"key", new StringValues(key)}
+                })
             };
         }
     }

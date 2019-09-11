@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WhereIs.Commands;
@@ -14,13 +13,13 @@ namespace WhereIs.Test.Unit.Commands
     {
         private WhereIsCommand _sut;
         private FakeLogger _logger;
-        private List<Location> _knownLocations;
+        private LocationCollection _knownLocations;
 
         [SetUp]
         public void SetUp()
         {
             _logger = new FakeLogger();
-            _knownLocations = new List<Location>
+            _knownLocations = new LocationCollection
             {
                 new Location("Foo"),
                 new Location("Bar"),
@@ -34,7 +33,7 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public async Task Invoke_NoValidDetailsFound_ReturnsFriendlyError()
         {
-            var request = SlackWebHookRequest.WithText(null);
+            var request = ExpectedRequests.WhereIsFor(null);
 
             var response = await _sut.Run(request, _logger).AsSlackResponse();
 
@@ -44,7 +43,7 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public async Task Invoke_KnownLocation_ReturnsLocation()
         {
-            var request = SlackWebHookRequest.WithText("Foo");
+            var request = ExpectedRequests.WhereIsFor("Foo");
 
             var response = await _sut.Run(request, _logger).AsSlackResponse();
 
@@ -54,7 +53,7 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public async Task Invoke_KnownLocation_ReturnsLocationMap()
         {
-            var request = SlackWebHookRequest.WithText("Foo");
+            var request = ExpectedRequests.WhereIsFor("Foo");
 
             var response = await _sut.Run(request, _logger).AsSlackResponse();
 
@@ -64,7 +63,7 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public async Task Invoke_MisspeltLocation_ReturnsLocation()
         {
-            var request = SlackWebHookRequest.WithText("Fop");
+            var request = ExpectedRequests.WhereIsFor("Fop");
 
             var response = await _sut.Run(request, _logger).AsSlackResponse();
 

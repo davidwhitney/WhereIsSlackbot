@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace WhereIs.FindingPlaces
 {
     public class LocationFinder : ILocationFinder
     {
-        private readonly List<Location> _locations;
+        private readonly LocationCollection _locations;
         private const int PercentageToleranceForMisspellings = 25;
 
-        public LocationFinder() : this(HardcodedLocations.Items)
+        public LocationFinder(LocationCollection knownLocations)
         {
-        }
-
-        public LocationFinder(IEnumerable<Location> knownLocations)
-        {
-            _locations = (knownLocations ?? new List<Location>()).ToList();
-
-            if (_locations.Count == 0)
-            {
-                _locations.AddRange(HardcodedLocations.Items);
-            }
+            _locations = knownLocations;
         }
 
         public Location Find(string location)

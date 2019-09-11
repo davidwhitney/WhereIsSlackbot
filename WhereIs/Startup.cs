@@ -15,6 +15,7 @@ namespace WhereIs
             var urlRoot = Environment.GetEnvironmentVariable("UrlRoot");
             var apiKey = Environment.GetEnvironmentVariable("ApiKey");
 
+            builder.Services.AddSingleton(_ => LocationCollection.Defaults);
             builder.Services.AddSingleton(_ => new Configuration {ApiKey = apiKey, UrlRoot = urlRoot});
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
