@@ -89,10 +89,6 @@ namespace WhereIs.Test.Unit.Commands
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(7, 7);
             Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
-
-            var temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, response.FileContents);
-            Console.WriteLine(temp);
         }
     }
 }
