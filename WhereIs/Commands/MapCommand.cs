@@ -76,7 +76,7 @@ namespace WhereIs.Commands
             const int sizeOfHighlight = 10;
 
             var xRange = Enumerable.Range(location.ImageLocation.X - sizeOfHighlight, location.ImageLocation.X + sizeOfHighlight).ToList();
-            var yRange = Enumerable.Range(location.ImageLocation.X - sizeOfHighlight, location.ImageLocation.X + sizeOfHighlight).ToList();
+            var yRange = Enumerable.Range(location.ImageLocation.Y - sizeOfHighlight, location.ImageLocation.Y + sizeOfHighlight).ToList();
 
             xRange.RemoveAll(x => x < 0 || x > rawMap.Width);
             yRange.RemoveAll(y => y < 0 || y > rawMap.Height);
