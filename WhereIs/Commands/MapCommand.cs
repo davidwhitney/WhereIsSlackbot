@@ -46,7 +46,10 @@ namespace WhereIs.Commands
                 var map = Path.Combine(context.FunctionAppDirectory, $"{location.ImageLocation.Map}.png");
                 var outputBytes = HighlightAreaInImage(map, location);
 
-                return new FileContentResult(outputBytes, "image/jpeg");
+                return new FileContentResult(outputBytes, "image/jpeg")
+                {
+                    FileDownloadName = $"map_{mapKey}.jpg"
+                };
             }
             catch (Exception ex)
             {
