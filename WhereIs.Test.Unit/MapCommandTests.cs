@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
+using WhereIs.ImageGeneration;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
@@ -31,7 +32,7 @@ namespace WhereIs.Test.Unit
                 new Location("Foo", new ImageLocation(10, 10)),
                 new Location("Foo Bar"),
             };
-            _sut = new MapCommand(_knownLocations, _config, _cache);
+            _sut = new MapCommand(_knownLocations, new ImageGenerator(_config), _cache);
         }
 
         [TestCase(null)]
