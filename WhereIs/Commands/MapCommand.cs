@@ -44,21 +44,6 @@ namespace WhereIs.Commands
                     return new NotFoundResult();
                 }
 
-                if (context == null)
-                {
-                    throw new Exception("Context is null wtf");
-                }
-
-                if (location.ImageLocation == null)
-                {
-                    throw new Exception("Image location is null wtf?");
-                }
-
-                if (location.ImageLocation.Map == null)
-                {
-                    throw new Exception("Image location map is null wtf?");
-                }
-
                 var map = Path.Combine(context.FunctionAppDirectory, "App_Data", "Maps", $"{location.ImageLocation.Map}.png");
                 var outputBytes = HighlightAreaInImage(map, location);
 

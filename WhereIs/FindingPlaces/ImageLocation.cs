@@ -6,6 +6,11 @@
         public int X { get; }
         public int Y { get; }
 
+        // Required for deserialization
+        public ImageLocation()
+        {
+        }
+
         public ImageLocation(int x, int y, string map = "map")
         {
             Map = map;
