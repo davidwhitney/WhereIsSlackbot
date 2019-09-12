@@ -4,6 +4,6 @@ namespace WhereIs.ImageGeneration
 {
     public interface IImageGenerator
     {
-        byte[] GetImageFor(Location location);
+        byte[] GetImageFor(ImageLocation location);
     }
 }

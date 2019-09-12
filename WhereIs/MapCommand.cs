@@ -19,9 +19,9 @@ namespace WhereIs
 
         public MapCommand(LocationCollection locations, IImageGenerator generator, IMemoryCache cache)
         {
-            _locations = locations;
-            _generator = generator;
-            _cache = cache;
+            _locations = locations ?? throw new ArgumentNullException(nameof(locations));
+            _generator = generator ?? throw new ArgumentNullException(nameof(generator));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
         [FunctionName("Map")]
@@ -38,7 +38,7 @@ namespace WhereIs
                     return new NotFoundResult();
                 }
 
-                var outputBytes = _cache.GetOrCreate(location.Key, entry => _generator.GetImageFor(location));
+                var outputBytes = _cache.GetOrCreate(location.Key, entry => _generator.GetImageFor(location.ImageLocation));
                 return new FileContentResult(outputBytes, "image/jpeg");
             }
             catch (Exception ex)

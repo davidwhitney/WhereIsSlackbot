@@ -12,13 +12,13 @@ namespace WhereIs.ImageGeneration
         private readonly Configuration _config;
         public ImageGenerator(Configuration config) => _config = config;
 
-        public byte[] GetImageFor(Location location)
+        public byte[] GetImageFor(ImageLocation location)
         {
-            var map = Path.Combine(_config.MapPath, $"{location.ImageLocation.Map}.png");
+            var map = Path.Combine(_config.MapPath, $"{location.Map}.png");
             return HighlightAreaInImage(map, location);
         }
 
-        private static byte[] HighlightAreaInImage(string path, Location location)
+        private static byte[] HighlightAreaInImage(string path, ImageLocation location)
         {
             using (var rawMap = Image.Load<Rgba32>(path))
             {
@@ -39,12 +39,12 @@ namespace WhereIs.ImageGeneration
             }
         }
 
-        private static void DrawHighlight(Location location, Image<Rgba32> rawMap)
+        private static void DrawHighlight(ImageLocation location, Image<Rgba32> rawMap)
         {
             const int sizeOfHighlight = 20;
 
-            var xRange = Enumerable.Range(location.ImageLocation.X - sizeOfHighlight, sizeOfHighlight * 2).ToList();
-            var yRange = Enumerable.Range(location.ImageLocation.Y - sizeOfHighlight, sizeOfHighlight * 2).ToList();
+            var xRange = Enumerable.Range(location.X - sizeOfHighlight, sizeOfHighlight * 2).ToList();
+            var yRange = Enumerable.Range(location.Y - sizeOfHighlight, sizeOfHighlight * 2).ToList();
 
             xRange.RemoveAll(x => x < 0 || x > rawMap.Width);
             yRange.RemoveAll(y => y < 0 || y > rawMap.Height);

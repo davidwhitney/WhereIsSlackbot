@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
-using WhereIs.ImageGeneration;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
@@ -20,6 +17,7 @@ namespace WhereIs.Test.Unit
         private LocationCollection _knownLocations;
         private Configuration _config;
         private MemoryCache _cache;
+        private FakeGenerator _fakeGenerator;
 
         [SetUp]
         public void SetUp()
@@ -27,15 +25,25 @@ namespace WhereIs.Test.Unit
             _logger = new FakeLogger();
             _config = new Configuration {ApiKey = "key", UrlRoot = "http://something" };
             _cache = new MemoryCache(new MemoryCacheOptions());
+            _fakeGenerator = new FakeGenerator {Returns = new byte[0]};
             _knownLocations = new LocationCollection
             {
                 new Location("Foo", new ImageLocation(10, 10)),
                 new Location("Foo Bar"),
             };
-            _sut = new MapCommand(_knownLocations, new ImageGenerator(_config), _cache);
+            _sut = new MapCommand(_knownLocations, _fakeGenerator, _cache);
+        }
+
+        [Test]
+        public void Ctor_DoesNotAcceptNullParams()
+        {
+            Assert.Throws<ArgumentNullException>(() => new MapCommand(null, _fakeGenerator, _cache));
+            Assert.Throws<ArgumentNullException>(() => new MapCommand(_knownLocations, null, _cache));
+            Assert.Throws<ArgumentNullException>(() => new MapCommand(_knownLocations, _fakeGenerator, null));
         }
 
         [TestCase(null)]
+        [TestCase(" ")]
         [TestCase("invalid-key")]
         public void Execute_NoValidKeyProvided_Returns404(string key)
         {
@@ -46,10 +54,11 @@ namespace WhereIs.Test.Unit
             Assert.That(response, Is.InstanceOf<NotFoundResult>());
         }
 
-        [Test]
-        public void Execute_ForKnownKey_ReturnsJpeg()
+        [TestCase("foo")]
+        [TestCase("foo+bar")]
+        public void Execute_ForKnownKey_ReturnsJpegContentType(string key)
         {
-            var request = ExpectedRequests.MapRequestForKey("foo");
+            var request = ExpectedRequests.MapRequestForKey(key);
 
             var response = _sut.Execute(request, _logger).AsFile();
 
@@ -57,56 +66,19 @@ namespace WhereIs.Test.Unit
         }
 
         [Test]
-        public void Execute_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
+        public void Execute_ForKnownKey_ReturnsJpegFileFromImageGenerator()
         {
-            var request = ExpectedRequests.MapRequestForKey(_knownLocations.Last().Key);
+            _fakeGenerator.Returns = new byte[] {1, 2, 3, 4};
+            var request = ExpectedRequests.MapRequestForKey(_knownLocations.First().Key);
 
             var response = _sut.Execute(request, _logger).AsFile();
 
-            Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
+            Assert.That(response.FileContents, Is.EqualTo(_fakeGenerator.Returns));
         }
-
-        [Test]
-        public void Execute_ForKnownKey_ReturnsModifiedImage()
-        {
-            var path = Path.Combine(_config.MapPath, "map.png");
-            var defaultMap = File.ReadAllBytes(path);
-            var request = ExpectedRequests.MapRequestForKey("foo");
-
-            var response = _sut.Execute(request, _logger).AsFile();
-
-            Assert.That(defaultMap.SequenceEqual(response.FileContents), Is.False);
-        }
-
-        [Test]
-        public void Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
-        {
-            var request = ExpectedRequests.MapRequestForKey("foo");
-
-            var response = _sut.Execute(request, _logger).AsFile();
-
-            var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
-            var pixel = returnedImage.GetPixel(10, 10);
-            Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
-        }
-
-        [Test]
-        public void Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
-        {
-            var request = ExpectedRequests.MapRequestForKey("foo");
-
-            var response = _sut.Execute(request, _logger).AsFile();
-
-            var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
-            var pixel = returnedImage.GetPixel(7, 7);
-            Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
-        }
-
+        
         [Test]
         public void Execute_ErrorIsThrown_LogsAndRethrows()
         {
-            _sut = new MapCommand(null, null, _cache); // Will cause a null ref exception.
-
             Assert.Throws<NullReferenceException>(() => _sut.Execute(null, _logger));
 
             Assert.That(_logger.Entries.Count, Is.EqualTo(1));
@@ -115,11 +87,22 @@ namespace WhereIs.Test.Unit
         [Test]
         public void Execute_ItemsAddedToCache()
         {
-            var request = ExpectedRequests.MapRequestForKey("foo");
+            var request = ExpectedRequests.MapRequestForKey(_knownLocations.First().Key);
 
             _sut.Execute(request, _logger).AsFile();
 
             Assert.That(_cache.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Execute_MultipleRequestsForSameKey_ImageSourcedFromCache()
+        {
+            var request = ExpectedRequests.MapRequestForKey(_knownLocations.First().Key);
+
+            _sut.Execute(request, _logger).AsFile();
+            _sut.Execute(request, _logger).AsFile();
+
+            Assert.That(_fakeGenerator.Called, Is.EqualTo(1));
         }
     }
 }
