@@ -3,7 +3,7 @@
     public class Location
     {
         public string Name { get; set; }
-        public ImageLocation ImageLocation { get; }
+        public ImageLocation ImageLocation { get; set; }
         public string Key => Name.ToLower();
 
         public Location()
