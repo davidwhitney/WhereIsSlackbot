@@ -17,7 +17,7 @@ namespace WhereIs.Slack
             {
                 new SlackAttachment
                 {
-                    text = $"{result.Name} is marked on the map. " + imageUrl,
+                    text = $"{result.Name} is marked on the map.",
                     image_url = imageUrl
                 }
             }.ToArray();
