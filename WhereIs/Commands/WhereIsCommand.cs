@@ -36,12 +36,10 @@ namespace WhereIs.Commands
                 var result = _finder.Find(request.Text);
                 if (result.IsNotFound())
                 {
-                    return new SlackResponse("Sorry! We can't find that place either.").AsJson();
+                    return SlackResponse.NotFound().AsJson();
                 }
 
                 var imageUrl = _urlHelper.ImageFor(result.Key);
-                log.LogDebug("Returning generated image url: " + imageUrl);
-
                 return new SlackResponse(result, imageUrl).AsJson();
             }
             catch (Exception ex)

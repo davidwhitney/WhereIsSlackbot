@@ -6,7 +6,7 @@ namespace WhereIs.FindingPlaces
     public class LocationFinder : ILocationFinder
     {
         private readonly LocationCollection _locations;
-        private const int PercentageToleranceForMisspellings = 25;
+        private const int PercentageToleranceForMisspellings = 35;
 
         public LocationFinder(LocationCollection locations)
         {
@@ -29,7 +29,7 @@ namespace WhereIs.FindingPlaces
 
             var (nearest, distance) = ReturnNearestSpellingMatch(key);
 
-            var maxDistance = (double)nearest.Key.Length / 100 * PercentageToleranceForMisspellings;
+            var maxDistance = (double)nearest.Name.Length / 100 * PercentageToleranceForMisspellings;
             var roundedDistance = Math.Round(maxDistance, MidpointRounding.AwayFromZero);
 
             return distance <= roundedDistance
@@ -54,7 +54,7 @@ namespace WhereIs.FindingPlaces
         /// Who knows how this actually works. Thanks internet.
         /// </summary>
         /// <returns>Distance between two strings</returns>
-        public static int LevenshteinDistance(string first, string second)
+        private static int LevenshteinDistance(string first, string second)
         {
             var d = new int[first.Length + 1, second.Length + 1];
 

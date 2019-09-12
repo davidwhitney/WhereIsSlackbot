@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using WhereIs.FindingPlaces;
 
@@ -23,6 +24,7 @@ namespace WhereIs.Slack
             }.ToArray();
         }
 
+        public static SlackResponse NotFound() => new SlackResponse("Sorry! We can't find that place either.");
         public JsonResult AsJson() => new JsonResult(this);
     }
 }
