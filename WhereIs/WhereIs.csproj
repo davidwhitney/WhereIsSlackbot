@@ -11,7 +11,6 @@
     <Content Include="App_Data\Maps\map.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  <ItemGroup>
     <Content Include="App_Data\Maps\gracechurch-local.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
