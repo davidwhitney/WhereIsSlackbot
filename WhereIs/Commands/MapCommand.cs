@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,21 @@ namespace WhereIs.Commands
                 if (location == null)
                 {
                     return new NotFoundResult();
+                }
+
+                if (context == null)
+                {
+                    throw new Exception("Context is null wtf");
+                }
+
+                if (location.ImageLocation == null)
+                {
+                    throw new Exception("Image location is null wtf?");
+                }
+
+                if (location.ImageLocation.Map == null)
+                {
+                    throw new Exception("Image location map is null wtf?");
                 }
 
                 var map = Path.Combine(context.FunctionAppDirectory, "App_Data", "Maps", $"{location.ImageLocation.Map}.png");
