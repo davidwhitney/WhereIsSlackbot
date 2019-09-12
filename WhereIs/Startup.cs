@@ -22,10 +22,7 @@ namespace WhereIs
             var actualRoot = localRoot ?? azureRoot;
 
             var config = new Configuration {ApiKey = apiKey, UrlRoot = urlRoot, Root = actualRoot};
-            var cache = new MemoryCache(new MemoryCacheOptions
-            { 
-                SizeLimit = 1024 * 30
-            });
+            var cache = new MemoryCache(new MemoryCacheOptions());
 
             builder.Services.AddSingleton(_ => config);
             builder.Services.AddSingleton<IMemoryCache>(_ => cache);
