@@ -61,6 +61,16 @@ namespace WhereIs.Test.Unit.Commands
         }
 
         [Test]
+        public async Task Run_KnownLocation_LocationMapHasCaption()
+        {
+            var request = ExpectedRequests.WhereIsFor("Foo");
+
+            var response = await _sut.Execute(request, _logger).AsSlackResponse();
+
+            Assert.That(response.attachments[0].text, Is.EqualTo("Foo is marked on the map."));
+        }
+
+        [Test]
         public async Task Run_MisspeltLocation_ReturnsLocation()
         {
             var request = ExpectedRequests.WhereIsFor("Fop");

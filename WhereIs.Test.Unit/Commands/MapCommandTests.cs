@@ -103,7 +103,6 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public void Execute_ErrorIsThrown_LogsAndRethrows()
         {
-            var request = ExpectedRequests.MapRequestForKey("foo");
             _sut = new MapCommand(null, null); // Will cause a null ref exception.
 
             Assert.Throws<NullReferenceException>(() => _sut.Execute(null, _logger));
