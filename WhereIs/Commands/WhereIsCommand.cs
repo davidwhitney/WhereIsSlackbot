@@ -42,6 +42,7 @@ namespace WhereIs.Commands
                 }
 
                 var imageUrl = _urlHelper.ImageFor(result.Key);
+                log.LogDebug("Returning generated image url: " + imageUrl);
 
                 return new SlackResponse(result, imageUrl).AsJson();
             }
