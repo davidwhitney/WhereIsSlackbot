@@ -1,8 +1,7 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WhereIs.Slack;
 
-namespace WhereIs.Test.Unit
+namespace WhereIs.Test.Unit.Slack
 {
     [TestFixture]
     public class PayloadMapperTests

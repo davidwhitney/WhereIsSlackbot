@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using WhereIs.Commands;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
-namespace WhereIs.Test.Unit.Commands
+namespace WhereIs.Test.Unit
 {
     [TestFixture]
     public class WhereIsCommandTests

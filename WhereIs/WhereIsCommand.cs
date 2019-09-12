@@ -10,7 +10,7 @@ using WhereIs.FindingPlaces;
 using WhereIs.Slack;
 using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
 
-namespace WhereIs.Commands
+namespace WhereIs
 {
     public class WhereIsCommand
     {

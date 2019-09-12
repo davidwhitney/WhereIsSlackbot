@@ -2,15 +2,14 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
-using WhereIs.Commands;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
-namespace WhereIs.Test.Unit.Commands
+namespace WhereIs.Test.Unit
 {
     [TestFixture]
     public class MapCommandTests
@@ -19,18 +18,20 @@ namespace WhereIs.Test.Unit.Commands
         private FakeLogger _logger;
         private LocationCollection _knownLocations;
         private Configuration _config;
+        private MemoryCache _cache;
 
         [SetUp]
         public void SetUp()
         {
             _logger = new FakeLogger();
             _config = new Configuration {ApiKey = "key", UrlRoot = "http://something" };
+            _cache = new MemoryCache(new MemoryCacheOptions());
             _knownLocations = new LocationCollection
             {
                 new Location("Foo", new ImageLocation(10, 10)),
                 new Location("Foo Bar"),
             };
-            _sut = new MapCommand(_knownLocations, _config);
+            _sut = new MapCommand(_knownLocations, _config, _cache);
         }
 
         [TestCase(null)]
@@ -103,11 +104,21 @@ namespace WhereIs.Test.Unit.Commands
         [Test]
         public void Execute_ErrorIsThrown_LogsAndRethrows()
         {
-            _sut = new MapCommand(null, null); // Will cause a null ref exception.
+            _sut = new MapCommand(null, null, _cache); // Will cause a null ref exception.
 
             Assert.Throws<NullReferenceException>(() => _sut.Execute(null, _logger));
 
             Assert.That(_logger.Entries.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Execute_ItemsAddedToCache()
+        {
+            var request = ExpectedRequests.MapRequestForKey("foo");
+
+            _sut.Execute(request, _logger).AsFile();
+
+            Assert.That(_cache.Count, Is.EqualTo(1));
         }
     }
 }

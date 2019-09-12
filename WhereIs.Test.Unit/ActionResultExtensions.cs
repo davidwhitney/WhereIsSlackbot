@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WhereIs.Slack;
 
-namespace WhereIs.Test.Unit.Commands
+namespace WhereIs.Test.Unit
 {
     public static class ActionResultExtensions
     {
