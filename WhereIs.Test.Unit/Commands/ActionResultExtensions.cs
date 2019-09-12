@@ -8,7 +8,6 @@ namespace WhereIs.Test.Unit.Commands
     {
         public static SlackResponse AsSlackResponse(this IActionResult src) => ((JsonResult) src).Value as SlackResponse;
         public static async Task<SlackResponse> AsSlackResponse(this Task<IActionResult> src) => (await src).AsSlackResponse();
-
-        public static async Task<FileContentResult> AsFile(this Task<IActionResult> src) => (FileContentResult) await src;
+        public static FileContentResult AsFile(this IActionResult src) => (FileContentResult) src;
     }
 }

@@ -25,7 +25,7 @@ namespace WhereIs.Commands
         }
 
         [FunctionName("Map")]
-        public async Task<IActionResult> Execute([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
+        public IActionResult Execute([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
             HttpRequest req,
             ILogger log)
         {

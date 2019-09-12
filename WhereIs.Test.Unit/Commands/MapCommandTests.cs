@@ -33,54 +33,55 @@ namespace WhereIs.Test.Unit.Commands
             _sut = new MapCommand(_knownLocations, _config);
         }
 
-        [Test]
-        public async Task Execute_NoValidKeyProvided_Returns404()
+        [TestCase(null)]
+        [TestCase("invalid-key")]
+        public void Execute_NoValidKeyProvided_Returns404(string key)
         {
-            var request = ExpectedRequests.MapRequestForKey(null);
+            var request = ExpectedRequests.MapRequestForKey(key);
 
-            var response = await _sut.Execute(request, _logger);
+            var response = _sut.Execute(request, _logger);
 
             Assert.That(response, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public async Task Execute_ForKnownKey_ReturnsJpeg()
+        public void Execute_ForKnownKey_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Execute(request, _logger).AsFile();
+            var response = _sut.Execute(request, _logger).AsFile();
 
             Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
         }
 
         [Test]
-        public async Task Execute_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
+        public void Execute_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey(_knownLocations.Last().Key);
 
-            var response = await _sut.Execute(request, _logger).AsFile();
+            var response = _sut.Execute(request, _logger).AsFile();
 
             Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
         }
 
         [Test]
-        public async Task Execute_ForKnownKey_ReturnsModifiedImage()
+        public void Execute_ForKnownKey_ReturnsModifiedImage()
         {
             var path = Path.Combine(_config.MapPath, "map.png");
             var defaultMap = File.ReadAllBytes(path);
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Execute(request, _logger).AsFile();
+            var response = _sut.Execute(request, _logger).AsFile();
 
             Assert.That(defaultMap.SequenceEqual(response.FileContents), Is.False);
         }
 
         [Test]
-        public async Task Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
+        public void Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Execute(request, _logger).AsFile();
+            var response = _sut.Execute(request, _logger).AsFile();
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(10, 10);
@@ -88,11 +89,11 @@ namespace WhereIs.Test.Unit.Commands
         }
 
         [Test]
-        public async Task Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
+        public void Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Execute(request, _logger).AsFile();
+            var response = _sut.Execute(request, _logger).AsFile();
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(7, 7);
@@ -105,7 +106,7 @@ namespace WhereIs.Test.Unit.Commands
             var request = ExpectedRequests.MapRequestForKey("foo");
             _sut = new MapCommand(null, null); // Will cause a null ref exception.
 
-            Assert.ThrowsAsync<NullReferenceException>(async () => await _sut.Execute(null, _logger).AsFile());
+            Assert.Throws<NullReferenceException>(() => _sut.Execute(null, _logger));
 
             Assert.That(_logger.Entries.Count, Is.EqualTo(1));
         }

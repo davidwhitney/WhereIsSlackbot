@@ -19,7 +19,9 @@ namespace WhereIs
             var azureRoot = $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot";
             var actualRoot = localRoot ?? azureRoot;
 
-            builder.Services.AddSingleton(_ => new Configuration {ApiKey = apiKey, UrlRoot = urlRoot, Root = actualRoot});
+            var config = new Configuration {ApiKey = apiKey, UrlRoot = urlRoot, Root = actualRoot};
+
+            builder.Services.AddSingleton(_ => config);
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
             builder.Services.AddTransient<ILocationRepository>(_ => new LocationRepository(actualRoot));
             builder.Services.AddTransient(_ => _.GetService<ILocationRepository>().Load());
