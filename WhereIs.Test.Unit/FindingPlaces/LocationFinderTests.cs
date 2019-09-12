@@ -1,7 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WhereIs.FindingPlaces;
-using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit.FindingPlaces
 {

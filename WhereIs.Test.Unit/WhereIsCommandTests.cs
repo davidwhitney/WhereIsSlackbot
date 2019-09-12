@@ -80,7 +80,7 @@ namespace WhereIs.Test.Unit
         }
 
         [Test]
-        public async Task Run_ErrorIsThrown_LogsAndRethrows()
+        public void Run_ErrorIsThrown_LogsAndRethrows()
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _sut.Execute(null, _logger));
 
