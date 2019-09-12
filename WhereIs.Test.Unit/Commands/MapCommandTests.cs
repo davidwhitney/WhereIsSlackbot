@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
 using NUnit.Framework;
 using WhereIs.Commands;
 using WhereIs.FindingPlaces;
+using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit.Commands
@@ -18,69 +18,69 @@ namespace WhereIs.Test.Unit.Commands
         private MapCommand _sut;
         private FakeLogger _logger;
         private LocationCollection _knownLocations;
-        private ExecutionContext _ctx;
+        private Configuration _config;
 
         [SetUp]
         public void SetUp()
         {
             _logger = new FakeLogger();
+            _config = new Configuration {ApiKey = "key", UrlRoot = "http://something" };
             _knownLocations = new LocationCollection
             {
                 new Location("Foo", new ImageLocation(10, 10)),
                 new Location("Foo Bar"),
             };
-            _ctx = new ExecutionContext {FunctionAppDirectory = Environment.CurrentDirectory};
-            _sut = new MapCommand(_knownLocations);
+            _sut = new MapCommand(_knownLocations, _config);
         }
 
         [Test]
-        public async Task Map_NoValidKeyProvided_Returns404()
+        public async Task Execute_NoValidKeyProvided_Returns404()
         {
             var request = ExpectedRequests.MapRequestForKey(null);
 
-            var response = await _sut.Map(request, _logger, _ctx);
+            var response = await _sut.Execute(request, _logger);
 
             Assert.That(response, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public async Task Invoke_ForKnownKey_ReturnsJpeg()
+        public async Task Execute_ForKnownKey_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+            var response = await _sut.Execute(request, _logger).AsFile();
 
             Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
         }
 
         [Test]
-        public async Task Invoke_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
+        public async Task Execute_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey(_knownLocations.Last().Key);
 
-            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+            var response = await _sut.Execute(request, _logger).AsFile();
 
             Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
         }
 
         [Test]
-        public async Task Invoke_ForKnownKey_ReturnsModifiedImage()
+        public async Task Execute_ForKnownKey_ReturnsModifiedImage()
         {
-            var path = Path.Combine(_ctx.FunctionAppDirectory, "App_Data", "Maps", "map.png");
+            var path = Path.Combine(_config.MapPath, "map.png");
             var defaultMap = File.ReadAllBytes(path);
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+            var response = await _sut.Execute(request, _logger).AsFile();
 
             Assert.That(defaultMap.SequenceEqual(response.FileContents), Is.False);
         }
 
         [Test]
-        public async Task Invoke_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
+        public async Task Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+            var response = await _sut.Execute(request, _logger).AsFile();
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(10, 10);
@@ -88,15 +88,26 @@ namespace WhereIs.Test.Unit.Commands
         }
 
         [Test]
-        public async Task Invoke_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
+        public async Task Execute_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
 
-            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+            var response = await _sut.Execute(request, _logger).AsFile();
 
             var returnedImage = new Bitmap(new MemoryStream(response.FileContents));
             var pixel = returnedImage.GetPixel(7, 7);
             Assert.That(pixel.Name, Is.EqualTo("fffe0000"));
+        }
+
+        [Test]
+        public void Execute_ErrorIsThrown_LogsAndRethrows()
+        {
+            var request = ExpectedRequests.MapRequestForKey("foo");
+            _sut = new MapCommand(null, null); // Will cause a null ref exception.
+
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _sut.Execute(null, _logger).AsFile());
+
+            Assert.That(_logger.Entries.Count, Is.EqualTo(1));
         }
     }
 }

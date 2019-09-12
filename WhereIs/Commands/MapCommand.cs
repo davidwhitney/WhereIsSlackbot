@@ -16,18 +16,18 @@ namespace WhereIs.Commands
     public class MapCommand
     {
         private readonly LocationCollection _locations;
+        private readonly Infrastructure.Configuration _config;
 
-        public MapCommand(LocationCollection locations)
+        public MapCommand(LocationCollection locations, Infrastructure.Configuration config)
         {
             _locations = locations;
+            _config = config;
         }
 
-        [FunctionName(nameof(Map))]
-        public async Task<IActionResult> Map(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
+        [FunctionName("Map")]
+        public async Task<IActionResult> Execute([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
             HttpRequest req,
-            ILogger log,
-            ExecutionContext context)
+            ILogger log)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace WhereIs.Commands
                     return new NotFoundResult();
                 }
 
-                var map = Path.Combine(context.FunctionAppDirectory, "App_Data", "Maps", $"{location.ImageLocation.Map}.png");
+                var map = Path.Combine(_config.MapPath, $"{location.ImageLocation.Map}.png");
                 var outputBytes = HighlightAreaInImage(map, location);
 
                 return new FileContentResult(outputBytes, "image/jpeg")

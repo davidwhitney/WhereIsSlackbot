@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web;
-using WhereIs.Commands;
 
 namespace WhereIs.Infrastructure
 {
@@ -8,18 +7,13 @@ namespace WhereIs.Infrastructure
     {
         private readonly Configuration _config;
 
-        public UrlHelper(Configuration config)
-        {
-            _config = config ?? throw new ArgumentException("Expected an instance of Configuration to be injected by the runtime.", nameof(config));
-        }
+        public UrlHelper(Configuration config) 
+            => _config = config ?? throw new ArgumentException("Expected an instance of Configuration to be injected by the runtime.", nameof(config));
 
-        public string ImageFor(string locationKey) => $"{ForUrl(nameof(MapCommand.Map))}&key={HttpUtility.UrlEncode(locationKey)}";
+        public string ImageFor(string locationKey) 
+            => $"{ForUrl("Map")}&key={HttpUtility.UrlEncode(locationKey)}";
 
-        private string ForUrl(string functionName)
-        {
-            var apiKey = _config.ApiKey;
-            var apiRoot = _config.UrlRoot;
-            return $"{apiRoot}/{functionName}?code={apiKey}";
-        }
+        private string ForUrl(string functionName) 
+            => $"{_config.UrlRoot}/{functionName}?code={_config.ApiKey}";
     }
 }
