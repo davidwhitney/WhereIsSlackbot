@@ -24,10 +24,8 @@ namespace WhereIs.Commands
         }
 
         [FunctionName("WhereIs")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
             HttpRequest req,
-            ExecutionContext context,
             ILogger log)
         {
             try

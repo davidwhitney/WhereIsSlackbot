@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
+using System.Web;
 using WhereIs.Commands;
 
 namespace WhereIs.Infrastructure
@@ -18,7 +18,7 @@ namespace WhereIs.Infrastructure
             _config = config ?? throw new Exception("Expected an instance of Configuration to be injected by the runtime.");
         }
 
-        public string ImageFor(string locationKey) => $"{ForUrl(nameof(MapCommand.Map))}&key={locationKey}";
+        public string ImageFor(string locationKey) => $"{ForUrl(nameof(MapCommand.Map))}&key={HttpUtility.UrlEncode(locationKey)}";
 
         public string ForUrl(string functionName)
         {

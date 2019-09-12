@@ -28,9 +28,7 @@ namespace WhereIs.Test.Unit.Commands
             _knownLocations = new LocationCollection
             {
                 new Location("Foo", new ImageLocation(10, 10)),
-                new Location("Bar"),
-                new Location("Baz"),
-                new Location("Aristotle", new ImageLocation(440, 105))
+                new Location("Foo Bar"),
             };
             _ctx = new ExecutionContext {FunctionAppDirectory = Environment.CurrentDirectory};
             _sut = new MapCommand(_knownLocations);
@@ -50,6 +48,16 @@ namespace WhereIs.Test.Unit.Commands
         public async Task Invoke_ForKnownKey_ReturnsJpeg()
         {
             var request = ExpectedRequests.MapRequestForKey("foo");
+
+            var response = await _sut.Map(request, _logger, _ctx).AsFile();
+
+            Assert.That(response.ContentType, Is.EqualTo("image/jpeg"));
+        }
+
+        [Test]
+        public async Task Invoke_ForKnownKeyWithSpaceInIt_ReturnsJpeg()
+        {
+            var request = ExpectedRequests.MapRequestForKey(_knownLocations.Last().Key);
 
             var response = await _sut.Map(request, _logger, _ctx).AsFile();
 
