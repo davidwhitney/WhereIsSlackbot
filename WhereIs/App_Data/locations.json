@@ -16,7 +16,7 @@
     }
   },
   {
-    "Name": "Plato",
+    "Name": "Bronte",
     "ImageLocation": {
       "Map": "map",
       "X": 386,
@@ -24,7 +24,7 @@
     }
   },
   {
-    "Name": "Aristotle",
+    "Name": "Plato",
     "ImageLocation": {
       "Map": "map",
       "X": 440,
@@ -32,7 +32,7 @@
     }
   },
   {
-    "Name": "Locke",
+    "Name": "Woolf",
     "ImageLocation": {
       "Map": "map",
       "X": 488,
@@ -56,7 +56,39 @@
     }
   },
   {
-    "Name": "Austen",
+    "Name": "Wollstonecraft",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 450,
+      "Y": 575
+    }
+  },
+  {
+    "Name": "Plath",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 155,
+      "Y": 645
+    }
+  },
+  {
+    "Name": "Nolan",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 163,
+      "Y": 590
+    }
+  },
+  {
+    "Name": "Dante",
+    "ImageLocation": {
+      "Map": "map",
+      "X": 365,
+      "Y": 575
+    }
+  },
+  {
+    "Name": "Baldwin",
     "ImageLocation": {
       "Map": "map",
       "X": 335,
@@ -72,7 +104,7 @@
     }
   },
   {
-    "Name": "Freud",
+    "Name": "Angelou",
     "ImageLocation": {
       "Map": "map",
       "X": 475,
@@ -80,7 +112,7 @@
     }
   },
   {
-    "Name": "Socrates",
+    "Name": "Neruda",
     "ImageLocation": {
       "Map": "map",
       "X": 450,
@@ -88,7 +120,7 @@
     }
   },
   {
-    "Name": "Cavendish",
+    "Name": "Hemmingway",
     "ImageLocation": {
       "Map": "map",
       "X": 400,
