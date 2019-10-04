@@ -84,7 +84,7 @@
             "type": "func",
             "dependsOn": "build",
             "options": {
-                "cwd": "${workspaceFolder}/WhereIs/bin/Debug/netcoreapp2.0"
+                "cwd": "${workspaceFolder}/WhereIs/bin/Debug/netcoreapp2.1"
             },
             "command": "host start",
             "isBackground": true,

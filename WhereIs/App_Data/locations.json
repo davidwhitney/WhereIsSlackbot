@@ -91,8 +91,8 @@
     "Name": "Baldwin",
     "ImageLocation": {
       "Map": "map",
-      "X": 335,
-      "Y": 700
+      "X": 635,
+      "Y": 690
     }
   },
   {
@@ -125,6 +125,38 @@
       "Map": "map",
       "X": 400,
       "Y": 695
+    }
+  },
+  {
+    "Name": "The Ship",
+    "ImageLocation": {
+      "Map": "gracechurch-local",
+      "X": 677,
+      "Y": 696
+    }
+  },
+  {
+    "Name": "The LCC",
+    "ImageLocation": {
+      "Map": "gracechurch-local",
+      "X": 270,
+      "Y": 910
+    }
+  },
+  {
+    "Name": "Boots",
+    "ImageLocation": {
+      "Map": "gracechurch-local",
+      "X": 645,
+      "Y": 350
+    }
+  },
+  {
+    "Name": "The Hydrant",
+    "ImageLocation": {
+      "Map": "gracechurch-local",
+      "X": 145,
+      "Y": 1050
     }
   }
 ]

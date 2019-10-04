@@ -10,7 +10,7 @@ using WhereIs.FindingPlaces;
 using WhereIs.Slack;
 using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
 
-namespace WhereIs.Commands
+namespace WhereIs
 {
     public class WhereIsCommand
     {
@@ -24,10 +24,8 @@ namespace WhereIs.Commands
         }
 
         [FunctionName("WhereIs")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+        public async Task<IActionResult> Execute([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
             HttpRequest req,
-            ExecutionContext context,
             ILogger log)
         {
             try
@@ -38,11 +36,10 @@ namespace WhereIs.Commands
                 var result = _finder.Find(request.Text);
                 if (result.IsNotFound())
                 {
-                    return new SlackResponse("Sorry! We can't find that place either.").AsJson();
+                    return SlackResponse.NotFound().AsJson();
                 }
 
                 var imageUrl = _urlHelper.ImageFor(result.Key);
-
                 return new SlackResponse(result, imageUrl).AsJson();
             }
             catch (Exception ex)
