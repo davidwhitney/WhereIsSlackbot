@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace WhereIs
     {
         private readonly LocationCollection _locations;
         private readonly IUrlHelper _urlHelper;
+        private readonly ICapacityChecker _capacityChecker;
 
-        public CapacityCommand(LocationCollection locations, IUrlHelper urlHelper)
+        public CapacityCommand(LocationCollection locations, IUrlHelper urlHelper, ICapacityChecker capacityChecker)
         {
             _locations = locations;
             _urlHelper = urlHelper;
+            _capacityChecker = capacityChecker;
         }
 
         [FunctionName("Capacity")]
@@ -38,8 +41,11 @@ namespace WhereIs
                     return SlackResponse.NoLocationProvided().AsJson();
                 }
 
+                var location = request.Text.ToLower().Trim();
+                var totalAvailableSeats = _locations.Where(x => x.Name.StartsWith(location)).Sum(x => x.Capacity);
+                var filledSeats = _capacityChecker.NumberOfDesksOccupiedForLocation(location);
 
-                var result = "There are 6 of 6 free desks in Gracechurch.";
+                var result = $"There are {filledSeats} of {totalAvailableSeats} free desks in Gracechurch.";
                 //var imageUrl = _urlHelper.ImageFor(result.Key);
                 return new SlackResponse(result).AsJson();
             }
@@ -49,5 +55,10 @@ namespace WhereIs
                 throw;
             }
         }
+    }
+
+    public interface ICapacityChecker
+    {
+        int NumberOfDesksOccupiedForLocation(string location);
     }
 }

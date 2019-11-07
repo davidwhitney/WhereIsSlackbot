@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
@@ -13,6 +14,7 @@ namespace WhereIs.Test.Unit
         private CapacityCommand _sut;
         private FakeLogger _logger;
         private LocationCollection _knownLocations;
+        private FakeCapacityChecker _capacityChecker;
 
         [SetUp]
         public void SetUp()
@@ -25,8 +27,11 @@ namespace WhereIs.Test.Unit
                 new Location("gracechurch::245-210", new ImageLocation(245, 210, "gracechurch")),
             };
 
+            _capacityChecker = new FakeCapacityChecker();
+
             _sut = new CapacityCommand(_knownLocations,
-                new UrlHelper(new Configuration { UrlRoot = "https://localhost/api", ApiKey = "key123" }));
+                new UrlHelper(new Configuration { UrlRoot = "https://localhost/api", ApiKey = "key123" }),
+                _capacityChecker);
         }
 
         [TestCase(null)]
@@ -46,10 +51,21 @@ namespace WhereIs.Test.Unit
         public async Task Run_KnownLocationRequested_ReturnsHintAsToAvailability(string locName)
         {
             var request = ExpectedRequests.CapacityFor(locName);
-
+            var capacity = new Random().Next(0, 100);
+            var used = new Random().Next(0, 100);
+            _knownLocations.Last().Capacity = capacity;
+            _capacityChecker.ReturnsThis = used;
+            
             var response = await _sut.Execute(request, _logger).AsSlackResponse();
 
-            Assert.That(response.text, Is.EqualTo("There are 6 of 6 free desks in Gracechurch."));
+            Assert.That(response.text, Is.EqualTo($"There are {used} of {capacity} free desks in Gracechurch."));
         }
+    }
+
+    public class FakeCapacityChecker : ICapacityChecker
+    {
+        public int ReturnsThis { get; set; }
+        public FakeCapacityChecker(int returnsThis = 0) => ReturnsThis = returnsThis;
+        public int NumberOfDesksOccupiedForLocation(string location) => ReturnsThis;
     }
 }
