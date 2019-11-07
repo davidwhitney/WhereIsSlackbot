@@ -1,4 +1,5 @@
 ﻿using System;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,20 +15,21 @@ namespace WhereIs
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var urlRoot = Environment.GetEnvironmentVariable("UrlRoot");
-            var apiKey = Environment.GetEnvironmentVariable("ApiKey");
+            var config = new Configuration
+            {
+                ApiKey = Environment.GetEnvironmentVariable("ApiKey"),
+                UrlRoot = Environment.GetEnvironmentVariable("UrlRoot"),
+                Root = Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot") ??
+                       $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot",
+                BlobCredentials = Environment.GetEnvironmentVariable("BlobCredentials")
+            };
 
-            var localRoot = Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot");
-            var azureRoot = $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot";
-            var actualRoot = localRoot ?? azureRoot;
-
-            var config = new Configuration {ApiKey = apiKey, UrlRoot = urlRoot, Root = actualRoot};
             var cache = new MemoryCache(new MemoryCacheOptions());
 
             builder.Services.AddSingleton(_ => config);
             builder.Services.AddSingleton<IMemoryCache>(_ => cache);
             builder.Services.AddTransient<IUrlHelper, UrlHelper>();
-            builder.Services.AddTransient<ILocationRepository>(_ => new LocationRepository(actualRoot));
+            builder.Services.AddTransient<ILocationRepository>(_ => new LocationRepository(config.Root));
             builder.Services.AddTransient(_ => _.GetService<ILocationRepository>().Load());
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
             builder.Services.AddTransient<IImageGenerator, ImageGenerator>();

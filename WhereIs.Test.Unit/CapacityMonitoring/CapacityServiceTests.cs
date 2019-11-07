@@ -1,33 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Azure.Storage.Blobs;
 using NUnit.Framework;
 using WhereIs.CapacityMonitoring;
+using WhereIs.Infrastructure;
 
 namespace WhereIs.Test.Unit.CapacityMonitoring
 {
-    [TestFixture]
+    [TestFixture(Category = "Integration")]
     public class CapacityServiceTests
     {
-        [Test]
-        public void CheckIn_IncrementsNumberAgainstProvidedLocationKey()
+        private CapacityService _sut;
+
+        [SetUp]
+        public void SetUp()
         {
-            var sut = new CapacityService();
+            var factory = new CapacityRepository(new Configuration
+            {
+                BlobCredentials = "blob-key"
+            });
 
-            sut.CheckIn("gracechurch::245-210");
-            var occupiedCount = sut.NumberOfDesksOccupiedForLocation("gracechurch");
-
-            Assert.That(occupiedCount, Is.EqualTo(1));
+            _sut = new CapacityService(factory);
         }
 
         [Test]
-        public void CheckIn_InvalidCompoundKey_Throws()
+        public void CheckIn_IncrementsNumberAgainstProvidedLocationKey()
         {
-            var sut = new CapacityService();
+            var before = _sut.NumberOfDesksOccupiedForLocation("gracechurch");
 
-            var ex = Assert.Throws<Exception>(() => sut.CheckIn("key-does-not-have-two-colons-in-it"));
+            _sut.CheckIn("gracechurch::245-210");
+            var occupiedCount = _sut.NumberOfDesksOccupiedForLocation("gracechurch");
 
-            Assert.That(ex.Message, Is.EqualTo("Invalid key for checkin."));
+            Assert.That(occupiedCount, Is.EqualTo(before + 1));
         }
     }
 }

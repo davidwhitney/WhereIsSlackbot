@@ -3,5 +3,6 @@
     public interface ICapacityService
     {
         int NumberOfDesksOccupiedForLocation(string location);
+        void CheckIn(string compoundKey);
     }
 }

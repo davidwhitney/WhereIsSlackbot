@@ -1,33 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace WhereIs.CapacityMonitoring
 {
     public class CapacityService : ICapacityService
     {
-        private Dictionary<string, int> _ledger;
-        public CapacityService() => _ledger = new Dictionary<string, int>();
+        private readonly CapacityRepository _repo;
+
+        public CapacityService(CapacityRepository repo)
+        {
+            _repo = repo;
+        }
 
         public int NumberOfDesksOccupiedForLocation(string location)
         {
-            return _ledger[location];
+            var state = _repo.Load();
+            var keysInThisRegion = state.Keys.Where(x => x.ToLower().StartsWith(location.ToLower()));
+            return keysInThisRegion.Sum(key => state[key]);
         }
 
         public void CheckIn(string compoundKey)
         {
-            var locationKey = compoundKey.ToLower().Split("::").FirstOrDefault();
-            if (!compoundKey.Contains("::") || locationKey == null)
+            compoundKey = compoundKey.ToLower().Trim();
+            var state = _repo.Load();
+            if (!state.ContainsKey(compoundKey))
             {
-                throw new Exception("Invalid key for checkin.");
+                state.Add(compoundKey, 0);
             }
 
-            if (!_ledger.ContainsKey(locationKey))
-            {
-                _ledger.Add(locationKey, 0);
-            }
+            state[compoundKey]++;
 
-            _ledger[locationKey]++;
+            _repo.Save(state);
         }
+
     }
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
@@ -61,12 +60,5 @@ namespace WhereIs.Test.Unit
 
             Assert.That(response.text, Is.EqualTo($"There are {used} of {capacity} free desks in Gracechurch."));
         }
-    }
-
-    public class FakeCapacityService : ICapacityService
-    {
-        public int ReturnsThis { get; set; }
-        public FakeCapacityService(int returnsThis = 0) => ReturnsThis = returnsThis;
-        public int NumberOfDesksOccupiedForLocation(string location) => ReturnsThis;
     }
 }

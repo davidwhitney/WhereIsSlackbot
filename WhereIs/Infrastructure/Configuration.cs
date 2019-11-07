@@ -9,5 +9,6 @@ namespace WhereIs.Infrastructure
         public string ApiKey { get; set; }
         public string Root { get; set; } = Environment.CurrentDirectory;
         public string MapPath => Path.Combine(Root, "App_Data", "Maps");
+        public string BlobCredentials { get; set; }
     }
 }
