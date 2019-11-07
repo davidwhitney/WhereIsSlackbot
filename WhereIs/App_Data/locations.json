@@ -1,162 +1,26 @@
 ﻿[
-  {
-    "Name": "Ben Jones",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 300,
-      "Y": 105
-    }
-  },
-  {
-    "Name": "David Whitney",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 220,
-      "Y": 240
-    }
-  },
-  {
-    "Name": "Bronte",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 386,
-      "Y": 105
-    }
-  },
-  {
-    "Name": "Plato",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 440,
-      "Y": 105
-    }
-  },
-  {
-    "Name": "Woolf",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 488,
-      "Y": 105
-    }
-  },
-  {
-    "Name": "Kitchen",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 590,
-      "Y": 325
-    }
-  },
-  {
-    "Name": "Open Space",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 400,
-      "Y": 575
-    }
-  },
-  {
-    "Name": "Wollstonecraft",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 450,
-      "Y": 575
-    }
-  },
-  {
-    "Name": "Plath",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 155,
-      "Y": 645
-    }
-  },
-  {
-    "Name": "Nolan",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 163,
-      "Y": 590
-    }
-  },
-  {
-    "Name": "Dante",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 365,
-      "Y": 575
-    }
-  },
-  {
-    "Name": "Baldwin",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 635,
-      "Y": 690
-    }
-  },
-  {
-    "Name": "Shakespeare",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 585,
-      "Y": 795
-    }
-  },
-  {
-    "Name": "Angelou",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 475,
-      "Y": 700
-    }
-  },
-  {
-    "Name": "Neruda",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 450,
-      "Y": 795
-    }
-  },
-  {
-    "Name": "Hemmingway",
-    "ImageLocation": {
-      "Map": "map",
-      "X": 400,
-      "Y": 695
-    }
-  },
-  {
-    "Name": "The Ship",
-    "ImageLocation": {
-      "Map": "gracechurch-local",
-      "X": 677,
-      "Y": 696
-    }
-  },
-  {
-    "Name": "The LCC",
-    "ImageLocation": {
-      "Map": "gracechurch-local",
-      "X": 270,
-      "Y": 910
-    }
-  },
-  {
-    "Name": "Boots",
-    "ImageLocation": {
-      "Map": "gracechurch-local",
-      "X": 645,
-      "Y": 350
-    }
-  },
-  {
-    "Name": "The Hydrant",
-    "ImageLocation": {
-      "Map": "gracechurch-local",
-      "X": 145,
-      "Y": 1050
-    }
-  }
+  // Gracechurch Street
+
+  { "Name": "Ben Jones", "ImageLocation": { "Map": "gracechurch", "X": 300, "Y": 105 } },
+  { "Name": "David Whitney", "ImageLocation": { "Map": "gracechurch", "X": 220, "Y": 240 } },
+  { "Name": "Bronte", "ImageLocation": { "Map": "gracechurch", "X": 386, "Y": 105 } },
+  { "Name": "Plato", "ImageLocation": { "Map": "gracechurch", "X": 440, "Y": 105 } },
+  { "Name": "Woolf", "ImageLocation": { "Map": "gracechurch", "X": 488, "Y": 105 } },
+  { "Name": "Kitchen", "ImageLocation": { "Map": "gracechurch", "X": 590, "Y": 325 } },
+  { "Name": "Open Space", "ImageLocation": { "Map": "gracechurch", "X": 400, "Y": 575 } },
+  { "Name": "Wollstonecraft", "ImageLocation": { "Map": "gracechurch", "X": 450, "Y": 575 } },
+  { "Name": "Plath", "ImageLocation": { "Map": "gracechurch", "X": 155, "Y": 645 } },
+  { "Name": "Nolan", "ImageLocation": { "Map": "gracechurch", "X": 163, "Y": 590 } },
+  { "Name": "Dante", "ImageLocation": { "Map": "gracechurch", "X": 365, "Y": 575 } },
+  { "Name": "Baldwin", "ImageLocation": { "Map": "gracechurch", "X": 635, "Y": 690 } },
+  { "Name": "Shakespeare", "ImageLocation": { "Map": "gracechurch", "X": 585, "Y": 795 } },
+  { "Name": "Angelou", "ImageLocation": { "Map": "gracechurch", "X": 475, "Y": 700 } },
+  { "Name": "Neruda", "ImageLocation": { "Map": "gracechurch", "X": 450, "Y": 795 } },
+  { "Name": "Hemmingway", "ImageLocation": { "Map": "gracechurch", "X": 400, "Y": 695 } },
+  { "Name": "The Ship", "ImageLocation": { "Map": "gracechurch-local", "X": 677, "Y": 696 } },
+  { "Name": "The LCC", "ImageLocation": { "Map": "gracechurch-local", "X": 270, "Y": 910 } },
+  { "Name": "Boots", "ImageLocation": { "Map": "gracechurch-local", "X": 645, "Y": 350 } },
+  { "Name": "The Hydrant", "ImageLocation": { "Map": "gracechurch-local", "X": 145, "Y": 1050 } },
+  
+  // BAM
 ]
