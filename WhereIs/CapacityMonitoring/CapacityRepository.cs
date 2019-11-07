@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using WhereIs.Infrastructure;
 
@@ -19,8 +22,7 @@ namespace WhereIs.CapacityMonitoring
 
         public Dictionary<string, int> Load()
         {
-            var blobClient = _storageClient.GetBlobClient("dev.json");
-            var blob = blobClient.Download(CancellationToken.None);
+            var blob = ReadOrCreate();
             using (var memoryStream = new MemoryStream())
             {
                 blob.Value.Content.CopyToAsync(memoryStream);
@@ -31,7 +33,7 @@ namespace WhereIs.CapacityMonitoring
 
         public void Save(Dictionary<string, int> state)
         {
-            var blobClient = _storageClient.GetBlobClient("dev.json");
+            var blobClient = _storageClient.GetBlobClient(SelectLogFile());
             var asString = JsonConvert.SerializeObject(state);
 
             using (var memoryStream = new MemoryStream())
@@ -43,5 +45,24 @@ namespace WhereIs.CapacityMonitoring
                 blobClient.Upload(memoryStream, true, CancellationToken.None);
             }
         }
+
+        private Response<BlobDownloadInfo> ReadOrCreate()
+        {
+            var blobClient = _storageClient.GetBlobClient(SelectLogFile());
+            Response<BlobDownloadInfo> blob;
+            try
+            {
+                blob = blobClient.Download(CancellationToken.None);
+            }
+            catch
+            {
+                Save(new Dictionary<string, int>());
+                blob = blobClient.Download(CancellationToken.None);
+            }
+
+            return blob;
+        }
+
+        private static string SelectLogFile() => $"usage.{DateTime.UtcNow.ToShortDateString().Replace("/", "-")}.json";
     }
 }
