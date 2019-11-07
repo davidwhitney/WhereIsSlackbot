@@ -24,8 +24,8 @@ namespace WhereIs.Test.Unit.ImageGeneration
         [Test]
         public void GetImageFor_ForKnownKey_ReturnsModifiedImage()
         {
-            var defaultMap = File.ReadAllBytes(Path.Combine(_config.MapPath, "map.png"));
-            var location = new ImageLocation(1, 1, "map");
+            var defaultMap = File.ReadAllBytes(Path.Combine(_config.MapPath, "gracechurch.png"));
+            var location = new ImageLocation(1, 1, "gracechurch");
 
             var response = _sut.GetImageFor(location);
 
@@ -35,7 +35,7 @@ namespace WhereIs.Test.Unit.ImageGeneration
         [Test]
         public void GetImageFor_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRed()
         {
-            var location = new ImageLocation(1, 1, "map");
+            var location = new ImageLocation(1, 1, "gracechurch");
 
             var response = _sut.GetImageFor(location);
 
@@ -46,7 +46,7 @@ namespace WhereIs.Test.Unit.ImageGeneration
         [Test]
         public void GetImageFor_ForKnownKeyPlaces_MarkerCoveringLocationOnMapInRedIsBiggerThanOnePixel()
         {
-            var location = new ImageLocation(1, 1, "map");
+            var location = new ImageLocation(1, 1, "gracechurch");
 
             var response = _sut.GetImageFor(location);
 

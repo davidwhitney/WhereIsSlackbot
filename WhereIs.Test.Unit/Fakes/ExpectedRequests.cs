@@ -28,6 +28,25 @@ namespace WhereIs.Test.Unit.Fakes
             };
         }
 
+        public static DefaultHttpRequest CapacityFor(string text, string command = "/capacity")
+        {
+            var encodedText = HttpUtility.UrlEncode(text);
+            var encodedCommand = HttpUtility.UrlEncode(command)?.Replace("%2f", "/"); // Slack is weird.
+            var body = $"token=gIkuvaNzQIHg97ATvDxqgjtO&channel_name=test&command={encodedCommand}&text={encodedText}";
+
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(body);
+            writer.Flush();
+            stream.Position = 0;
+
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Query = new QueryCollection(),
+                Body = stream
+            };
+        }
+
         public static DefaultHttpRequest MapRequestForKey(string key)
         {
             return new DefaultHttpRequest(new DefaultHttpContext())
