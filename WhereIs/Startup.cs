@@ -19,6 +19,7 @@ namespace WhereIs
             var config = new Configuration
             {
                 ApiKey = Environment.GetEnvironmentVariable("ApiKey"),
+                CapacityApiKey = Environment.GetEnvironmentVariable("CapacityApiKey"),
                 UrlRoot = Environment.GetEnvironmentVariable("UrlRoot"),
                 Root = Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot") ??
                        $"{Environment.GetEnvironmentVariable("HOME")}/site/wwwroot",

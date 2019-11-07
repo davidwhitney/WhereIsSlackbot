@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -15,14 +16,24 @@ namespace WhereIs.ImageGeneration
         public byte[] GetImageFor(ImageLocation location)
         {
             var map = Path.Combine(_config.MapPath, $"{location.Map}.png");
-            return HighlightAreaInImage(map, location);
+            return HighlightAreaInImage(map, new[] {new Highlight(location, Rgba32.Red)});
         }
 
-        private static byte[] HighlightAreaInImage(string path, ImageLocation location)
+        public byte[] HighlightMap(string location, IEnumerable<Highlight> highlights)
+        {
+            var map = Path.Combine(_config.MapPath, $"{location}.png");
+            return HighlightAreaInImage(map, highlights);
+        }
+
+        private static byte[] HighlightAreaInImage(string path, IEnumerable<Highlight> highlights)
         {
             using (var rawMap = Image.Load<Rgba32>(path))
             {
-                DrawHighlight(location, rawMap);
+                foreach (var loc in highlights)
+                {
+                    DrawHighlight(loc, rawMap);
+                }
+
                 return GetBytesForModifiedImage(rawMap);
             }
         }
@@ -39,12 +50,12 @@ namespace WhereIs.ImageGeneration
             }
         }
 
-        private static void DrawHighlight(ImageLocation location, Image<Rgba32> rawMap)
+        private static void DrawHighlight(Highlight highlight, Image<Rgba32> rawMap)
         {
             const int sizeOfHighlight = 20;
 
-            var xRange = Enumerable.Range(location.X - sizeOfHighlight, sizeOfHighlight * 2).ToList();
-            var yRange = Enumerable.Range(location.Y - sizeOfHighlight, sizeOfHighlight * 2).ToList();
+            var xRange = Enumerable.Range(highlight.Location.X - sizeOfHighlight, sizeOfHighlight * 2).ToList();
+            var yRange = Enumerable.Range(highlight.Location.Y - sizeOfHighlight, sizeOfHighlight * 2).ToList();
 
             xRange.RemoveAll(x => x < 0 || x > rawMap.Width);
             yRange.RemoveAll(y => y < 0 || y > rawMap.Height);
@@ -53,7 +64,7 @@ namespace WhereIs.ImageGeneration
             {
                 foreach (var y in yRange)
                 {
-                    rawMap[x, y] = Rgba32.Red;
+                    rawMap[x, y] = highlight.Colour;
                 }
             }
         }

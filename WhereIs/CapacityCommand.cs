@@ -46,9 +46,9 @@ namespace WhereIs
                 var totalAvailableSeats = _locations.Where(x => x.Name.StartsWith(location)).Sum(x => x.Capacity);
                 var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(location);
 
-                var result = $"There are {filledSeats} of {totalAvailableSeats} free desks in Gracechurch.";
-                //var imageUrl = _urlHelper.ImageFor(result.Key);
-                return new SlackResponse(result).AsJson();
+                var result = $"There are {filledSeats} of {totalAvailableSeats} free desks in {request.Text}.";
+                var imageUrl = _urlHelper.CapacityImageFor(location);
+                return new SlackResponse(result, imageUrl).AsJson();
             }
             catch (Exception ex)
             {

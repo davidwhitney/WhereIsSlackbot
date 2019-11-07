@@ -3,5 +3,6 @@
     public interface IUrlHelper
     {
         string ImageFor(string locationKey);
+        string CapacityImageFor(string locationKey);
     }
 }

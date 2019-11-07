@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace WhereIs.CapacityMonitoring
 {
@@ -32,5 +33,9 @@ namespace WhereIs.CapacityMonitoring
             _repo.Save(state);
         }
 
+        public void Reset()
+        {
+            _repo.Save(new Dictionary<string, int> {{"__nothing__", 0}});
+        }
     }
 }

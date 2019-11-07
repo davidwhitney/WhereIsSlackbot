@@ -10,6 +10,19 @@ namespace WhereIs.Slack
         public SlackAttachment[] attachments { get; set; } = new SlackAttachment[0];
 
         public SlackResponse(string message) => text = message;
+        
+        public SlackResponse(string result, string imageUrl)
+        {
+            text = result;
+            attachments = new List<SlackAttachment>
+            {
+                new SlackAttachment
+                {
+                    text = "Here's a heatmap of availability",
+                    image_url = imageUrl
+                }
+            }.ToArray();
+        }
         public SlackResponse(Location result, string imageUrl)
         {
             text = result.Name;

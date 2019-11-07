@@ -11,9 +11,9 @@ namespace WhereIs.Infrastructure
             => _config = config ?? throw new ArgumentException("Expected an instance of Configuration to be injected by the runtime.", nameof(config));
 
         public string ImageFor(string locationKey) 
-            => $"{ForUrl("Map")}&key={HttpUtility.UrlEncode(locationKey)}";
+            => $"{_config.UrlRoot}/Map?code={_config.ApiKey}&key={HttpUtility.UrlEncode(locationKey)}";
 
-        private string ForUrl(string functionName) 
-            => $"{_config.UrlRoot}/{functionName}?code={_config.ApiKey}";
+        public string CapacityImageFor(string locationKey) 
+            => $"{_config.UrlRoot}/HeatMap?code={_config.CapacityApiKey}&key={HttpUtility.UrlEncode(locationKey)}";
     }
 }

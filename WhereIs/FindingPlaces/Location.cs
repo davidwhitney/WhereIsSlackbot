@@ -8,6 +8,7 @@ namespace WhereIs.FindingPlaces
         public int Capacity { get; set; }
         public ImageLocation ImageLocation { get; set; }
         public string Key => HttpUtility.UrlEncode(Name.ToLower());
+        public string RawKey() => HttpUtility.UrlDecode(Key);
 
         public Location()
         {

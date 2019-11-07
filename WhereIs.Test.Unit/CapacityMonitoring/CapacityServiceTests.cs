@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WhereIs.CapacityMonitoring;
 using WhereIs.Infrastructure;
 
@@ -15,7 +14,7 @@ namespace WhereIs.Test.Unit.CapacityMonitoring
         {
             var factory = new CapacityRepository(new Configuration
             {
-                BlobCredentials = "blob-key"
+                BlobCredentials = "DefaultEndpointsProtocol=https;AccountName=whereischeckins;AccountKey=c4l+Wsn1rGRZfTIL1i1SZdoXjoMtIpHdYCBH+vZGk5jki9YDBJn+XQfcp0HSazrNjOs+JyENOkQOLcjGxsw5/g==;EndpointSuffix=core.windows.net"
             });
 
             _sut = new CapacityService(factory);

@@ -11,5 +11,6 @@ namespace WhereIs.Test.Unit.Fakes
         {
             
         }
+        public void Reset() => throw new System.NotImplementedException();
     }
 }

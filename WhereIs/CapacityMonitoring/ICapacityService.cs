@@ -4,5 +4,6 @@
     {
         int NumberOfDesksOccupiedForLocation(string location);
         void CheckIn(string compoundKey);
+        void Reset();
     }
 }

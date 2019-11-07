@@ -59,6 +59,18 @@ namespace WhereIs.Test.Unit.Fakes
             };
         }
 
+        public static DefaultHttpRequest HeatMapRequestForKey(string key)
+        {
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Query = new QueryCollection(new Dictionary<string, StringValues>
+                {
+                    {"code", new StringValues("someApiKey")},
+                    {"key", new StringValues(key)}
+                })
+            };
+        }
+
         private static MemoryStream StreamContaining(string location)
         {
             var stream = new MemoryStream();
