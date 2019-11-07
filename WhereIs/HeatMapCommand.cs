@@ -56,7 +56,7 @@ namespace WhereIs
                 {
                     var location = _locations.Single(x=>x.Key == poi.Key);
                     var totalAvailableSeats = location.Capacity;
-                    var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.Key);
+                    var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.RawKey());
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
                     
                     var colorGrade = percentage >= 100
