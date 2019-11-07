@@ -33,7 +33,11 @@ namespace WhereIs
                 }
 
                 _capacityService.CheckIn(location);
-                return new OkResult();
+
+                return new JsonResult(new
+                {
+                    message = "Thanks for checking in!"
+                });
             }
             catch (Exception ex)
             {
