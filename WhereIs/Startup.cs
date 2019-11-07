@@ -3,6 +3,7 @@ using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
 using WhereIs.ImageGeneration;
 using WhereIs.Infrastructure;
@@ -33,6 +34,8 @@ namespace WhereIs
             builder.Services.AddTransient(_ => _.GetService<ILocationRepository>().Load());
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
             builder.Services.AddTransient<IImageGenerator, ImageGenerator>();
+            builder.Services.AddTransient<ICapacityService, CapacityService>();
+            builder.Services.AddTransient<CapacityRepository, CapacityRepository>();
         }
     }
 }
