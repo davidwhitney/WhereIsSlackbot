@@ -50,7 +50,7 @@ namespace WhereIs
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.Key);
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
 
-                    highlights.Add(new Highlight(poi.ImageLocation, Rgba32.AliceBlue));
+                    highlights.Add(new Highlight(poi.ImageLocation, Rgba32.Tomato));
                 }
 
                 var outputBytes = _generator.HighlightMap(mapKey, highlights);

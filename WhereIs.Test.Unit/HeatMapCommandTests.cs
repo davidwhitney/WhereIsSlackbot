@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
+using WhereIs.ImageGeneration;
+using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit
@@ -52,7 +54,18 @@ namespace WhereIs.Test.Unit
         public void Execute_ForKnownKey_ReturnsJpegFileFromImageGenerator()
         {
             _fakeGenerator.Returns = new byte[] {1, 2, 3, 4};
-            var request = ExpectedRequests.MapRequestForKey(_knownLocations.First().Key);
+            var request = ExpectedRequests.MapRequestForKey("gracechurch");
+
+            var response = _sut.Execute(request, _logger).AsFile();
+
+            Assert.That(response.FileContents, Is.EqualTo(_fakeGenerator.Returns));
+        }
+
+        [Test]
+        public void Blah_realthing()
+        {
+            _sut = new HeatMapCommand(_knownLocations, new ImageGenerator(new Configuration()), _cache, _capacityService);
+            var request = ExpectedRequests.MapRequestForKey("gracechurch");
 
             var response = _sut.Execute(request, _logger).AsFile();
 
