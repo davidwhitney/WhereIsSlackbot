@@ -58,7 +58,7 @@ namespace WhereIs.Test.Unit
             
             var response = await _sut.Execute(request, _logger).AsSlackResponse();
 
-            Assert.That(response.text, Is.EqualTo($"There are {used} of {capacity} free desks in Gracechurch."));
+            Assert.That(response.text, Is.EqualTo($"There are {used} of {capacity} free desks in {locName}."));
         }
     }
 }

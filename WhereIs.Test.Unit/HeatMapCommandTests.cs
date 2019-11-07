@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using WhereIs.FindingPlaces;
-using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit
