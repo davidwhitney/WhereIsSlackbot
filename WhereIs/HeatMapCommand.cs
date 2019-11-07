@@ -47,7 +47,7 @@ namespace WhereIs
                     { 20, Rgba32.Green },
                     { 40, Rgba32.Yellow },
                     { 60, Rgba32.Orange },
-                    { 80, Rgba32.Red },
+                    { 80, Rgba32.OrangeRed },
                     { 100, Rgba32.Red },
                 };
 
