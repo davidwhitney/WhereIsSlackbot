@@ -25,7 +25,7 @@ namespace WhereIs.Test.Unit
                 new Location("gracechurch::245-210", new ImageLocation(245, 210, "gracechurch")),
             };
 
-            _sut = new CapacityCommand(new LocationFinder(_knownLocations),
+            _sut = new CapacityCommand(_knownLocations,
                 new UrlHelper(new Configuration { UrlRoot = "https://localhost/api", ApiKey = "key123" }));
         }
 

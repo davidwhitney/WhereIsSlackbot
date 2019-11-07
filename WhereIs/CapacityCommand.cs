@@ -14,12 +14,12 @@ namespace WhereIs
 {
     public class CapacityCommand
     {
-        private readonly ILocationFinder _finder;
+        private readonly LocationCollection _locations;
         private readonly IUrlHelper _urlHelper;
 
-        public CapacityCommand(ILocationFinder finder, IUrlHelper urlHelper)
+        public CapacityCommand(LocationCollection locations, IUrlHelper urlHelper)
         {
-            _finder = finder;
+            _locations = locations;
             _urlHelper = urlHelper;
         }
 
@@ -33,14 +33,15 @@ namespace WhereIs
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var request = PayloadMapper.Map<SlackRequest>(requestBody);
 
-                var result = _finder.Find(request.Text);
-                if (result.IsNotFound())
+                if (string.IsNullOrWhiteSpace(request.Text))
                 {
-                    return SlackResponse.NotFound().AsJson();
+                    return SlackResponse.NoLocationProvided().AsJson();
                 }
 
-                var imageUrl = _urlHelper.ImageFor(result.Key);
-                return new SlackResponse(result, imageUrl).AsJson();
+
+                var result = "There are 6 of 6 free desks in Gracechurch.";
+                //var imageUrl = _urlHelper.ImageFor(result.Key);
+                return new SlackResponse(result).AsJson();
             }
             catch (Exception ex)
             {

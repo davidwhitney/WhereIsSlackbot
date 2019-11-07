@@ -24,6 +24,7 @@ namespace WhereIs.Slack
         }
 
         public static SlackResponse NotFound() => new SlackResponse("Sorry! We can't find that place either.");
+        public static SlackResponse NoLocationProvided() => new SlackResponse("Sorry! You need to specify a location.");
         public JsonResult AsJson() => new JsonResult(this);
     }
 }
