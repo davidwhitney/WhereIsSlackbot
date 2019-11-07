@@ -48,6 +48,7 @@ namespace WhereIs
                     { 40, Rgba32.Yellow },
                     { 60, Rgba32.Orange },
                     { 80, Rgba32.Red },
+                    { 100, Rgba32.Red },
                 };
 
                 var highlights = new List<Highlight>();
@@ -58,7 +59,7 @@ namespace WhereIs
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.Key);
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
 
-                    var colorGrade = hotness.LastOrDefault(x => percentage <= x.Key);
+                    var colorGrade = hotness.FirstOrDefault(x => percentage <= x.Key);
 
                     highlights.Add(new Highlight(poi.ImageLocation, colorGrade.Value));
                 }
