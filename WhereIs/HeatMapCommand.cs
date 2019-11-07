@@ -42,6 +42,14 @@ namespace WhereIs
 
                 var pointsOfInterest = _locations.Where(x => x.RawKey().StartsWith(mapKey + "::")).ToList();
 
+                var hotness = new Dictionary<int, Rgba32>
+                {
+                    { 20, Rgba32.Green },
+                    { 40, Rgba32.Yellow },
+                    { 60, Rgba32.Orange },
+                    { 80, Rgba32.Red },
+                };
+
                 var highlights = new List<Highlight>();
                 foreach (var poi in pointsOfInterest)
                 {
@@ -50,7 +58,9 @@ namespace WhereIs
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.Key);
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
 
-                    highlights.Add(new Highlight(poi.ImageLocation, Rgba32.Tomato));
+                    var colorGrade = hotness.LastOrDefault(x => percentage <= x.Key);
+
+                    highlights.Add(new Highlight(poi.ImageLocation, colorGrade.Value));
                 }
 
                 var outputBytes = _generator.HighlightMap(mapKey, highlights);
