@@ -58,10 +58,12 @@ namespace WhereIs
                     var totalAvailableSeats = location.Capacity;
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.Key);
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
+                    
+                    var colorGrade = percentage >= 100
+                        ? Rgba32.Red
+                        : hotness.FirstOrDefault(x => percentage <= x.Key).Value;
 
-                    var colorGrade = hotness.FirstOrDefault(x => percentage <= x.Key);
-
-                    highlights.Add(new Highlight(poi.ImageLocation, colorGrade.Value));
+                    highlights.Add(new Highlight(poi.ImageLocation, colorGrade));
                 }
 
                 var outputBytes = _generator.HighlightMap(mapKey, highlights);
