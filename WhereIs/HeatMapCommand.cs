@@ -44,10 +44,10 @@ namespace WhereIs
 
                 var hotness = new Dictionary<int, Rgba32>
                 {
-                    { 20, Rgba32.Green },
-                    { 40, Rgba32.Yellow },
-                    { 60, Rgba32.Orange },
-                    { 80, Rgba32.OrangeRed },
+                    { 20, Rgba32.LightGreen },
+                    { 40, Rgba32.Green },
+                    { 60, Rgba32.Yellow },
+                    { 80, Rgba32.Orange },
                     { 100, Rgba32.Red },
                 };
 
