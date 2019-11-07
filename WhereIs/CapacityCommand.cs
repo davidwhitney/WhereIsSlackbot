@@ -19,6 +19,8 @@ namespace WhereIs
 
         public CapacityCommand(ILocationFinder finder, IUrlHelper urlHelper)
         {
+            _finder = finder;
+            _urlHelper = urlHelper;
         }
 
         [FunctionName("Capacity")]
