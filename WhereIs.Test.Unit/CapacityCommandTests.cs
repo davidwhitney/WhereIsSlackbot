@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
 using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
@@ -14,7 +15,7 @@ namespace WhereIs.Test.Unit
         private CapacityCommand _sut;
         private FakeLogger _logger;
         private LocationCollection _knownLocations;
-        private FakeCapacityChecker _capacityChecker;
+        private FakeCapacityService _capacityService;
 
         [SetUp]
         public void SetUp()
@@ -27,11 +28,11 @@ namespace WhereIs.Test.Unit
                 new Location("gracechurch::245-210", new ImageLocation(245, 210, "gracechurch")),
             };
 
-            _capacityChecker = new FakeCapacityChecker();
+            _capacityService = new FakeCapacityService();
 
             _sut = new CapacityCommand(_knownLocations,
                 new UrlHelper(new Configuration { UrlRoot = "https://localhost/api", ApiKey = "key123" }),
-                _capacityChecker);
+                _capacityService);
         }
 
         [TestCase(null)]
@@ -54,7 +55,7 @@ namespace WhereIs.Test.Unit
             var capacity = new Random().Next(0, 100);
             var used = new Random().Next(0, 100);
             _knownLocations.Last().Capacity = capacity;
-            _capacityChecker.ReturnsThis = used;
+            _capacityService.ReturnsThis = used;
             
             var response = await _sut.Execute(request, _logger).AsSlackResponse();
 
@@ -62,10 +63,10 @@ namespace WhereIs.Test.Unit
         }
     }
 
-    public class FakeCapacityChecker : ICapacityChecker
+    public class FakeCapacityService : ICapacityService
     {
         public int ReturnsThis { get; set; }
-        public FakeCapacityChecker(int returnsThis = 0) => ReturnsThis = returnsThis;
+        public FakeCapacityService(int returnsThis = 0) => ReturnsThis = returnsThis;
         public int NumberOfDesksOccupiedForLocation(string location) => ReturnsThis;
     }
 }

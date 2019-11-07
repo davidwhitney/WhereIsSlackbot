@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
 using WhereIs.Slack;
 using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
@@ -17,13 +18,13 @@ namespace WhereIs
     {
         private readonly LocationCollection _locations;
         private readonly IUrlHelper _urlHelper;
-        private readonly ICapacityChecker _capacityChecker;
+        private readonly ICapacityService _capacityService;
 
-        public CapacityCommand(LocationCollection locations, IUrlHelper urlHelper, ICapacityChecker capacityChecker)
+        public CapacityCommand(LocationCollection locations, IUrlHelper urlHelper, ICapacityService capacityService)
         {
             _locations = locations;
             _urlHelper = urlHelper;
-            _capacityChecker = capacityChecker;
+            _capacityService = capacityService;
         }
 
         [FunctionName("Capacity")]
@@ -43,7 +44,7 @@ namespace WhereIs
 
                 var location = request.Text.ToLower().Trim();
                 var totalAvailableSeats = _locations.Where(x => x.Name.StartsWith(location)).Sum(x => x.Capacity);
-                var filledSeats = _capacityChecker.NumberOfDesksOccupiedForLocation(location);
+                var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(location);
 
                 var result = $"There are {filledSeats} of {totalAvailableSeats} free desks in Gracechurch.";
                 //var imageUrl = _urlHelper.ImageFor(result.Key);
@@ -55,10 +56,5 @@ namespace WhereIs
                 throw;
             }
         }
-    }
-
-    public interface ICapacityChecker
-    {
-        int NumberOfDesksOccupiedForLocation(string location);
     }
 }
