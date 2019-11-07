@@ -14,6 +14,6 @@ namespace WhereIs.Infrastructure
             => $"{_config.UrlRoot}/Map?code={_config.ApiKey}&key={HttpUtility.UrlEncode(locationKey)}";
 
         public string CapacityImageFor(string locationKey) 
-            => $"{_config.UrlRoot}/HeatMap?code={_config.CapacityApiKey}&key={HttpUtility.UrlEncode(locationKey)}";
+            => $"{_config.UrlRoot}/HeatMap?code={_config.CapacityApiKey}&key={HttpUtility.UrlEncode(locationKey)}&ticks={DateTime.UtcNow.Ticks}";
     }
 }
