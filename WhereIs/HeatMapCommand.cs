@@ -49,9 +49,9 @@ namespace WhereIs
                     var location = _locations.Single(x=>x.Key == poi.Key);
                     var totalAvailableSeats = location.Capacity;
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.RawKey());
-                    var percentage = (filledSeats / totalAvailableSeats) * 100;
+                    var percentage = Math.Floor(filledSeats / (double)totalAvailableSeats * 100);
                     
-                    var colorGrade = hotness.Rank(percentage);
+                    var colorGrade = hotness.Rank((int)percentage);
 
                     highlights.Add(new Highlight(poi.ImageLocation, colorGrade));
                 }
