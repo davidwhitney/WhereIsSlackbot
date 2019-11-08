@@ -49,7 +49,6 @@ namespace WhereIs.ImageGeneration
                 return outputBytes;
             }
         }
-
         private static void DrawHighlight(Highlight highlight, Image<Rgba32> rawMap)
         {
             const int sizeOfHighlight = 20;
@@ -64,7 +63,24 @@ namespace WhereIs.ImageGeneration
             {
                 foreach (var y in yRange)
                 {
-                    rawMap[x, y] = highlight.Colour;
+                    var existing = rawMap[x, y];
+
+                    var newR = highlight.Colour.R;
+                    var newG = highlight.Colour.G;
+                    var newB = highlight.Colour.B;
+
+                    if (existing != Rgba32.White)
+                    {
+                        var shade_factor = 0.55;
+
+                        newR = (byte)(newR * (1 - shade_factor));
+                        newG = (byte)(newG * (1 - shade_factor));
+                        newB = (byte)(newB * (1 - shade_factor));
+                    }
+
+                    var next = new Rgba32(newR, newG, newB, existing.A);
+
+                    rawMap[x, y] = next;
                 }
             }
         }
