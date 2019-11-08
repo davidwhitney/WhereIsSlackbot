@@ -36,7 +36,8 @@ namespace WhereIs
             builder.Services.AddTransient<ILocationFinder, LocationFinder>();
             builder.Services.AddTransient<IImageGenerator, ImageGenerator>();
             builder.Services.AddTransient<ICapacityService, CapacityService>();
-            builder.Services.AddTransient<CapacityRepository, CapacityRepository>();
+            builder.Services.AddTransient<ICapacityRepository, CapacityRepository>();
+            builder.Services.AddTransient(_ => new BlobContainerClient(config.BlobCredentials, "whereischeckins"));
         }
     }
 }

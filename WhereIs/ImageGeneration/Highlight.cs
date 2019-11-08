@@ -8,10 +8,6 @@ namespace WhereIs.ImageGeneration
         public Coord Location { get; set; }
         public Rgba32 Colour { get; set; }
 
-        public Highlight()
-        {
-        }
-
         public Highlight(Coord location, Rgba32 colour)
         {
             Location = location;

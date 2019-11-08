@@ -59,6 +59,26 @@ namespace WhereIs.Test.Unit
             var response = await _sut.Execute(request, _logger).AsSlackResponse();
 
             Assert.That(response.text, Is.EqualTo($"There are {used} of {capacity} desks used in {locName}."));
+            Assert.That(response.attachments.Single().image_url, Is.Not.Null);
+        }        
+        
+        [Test]
+        public async Task Run_KnownLocationRequested_IncludesAHeatMapImage()
+        {
+            var request = ExpectedRequests.CapacityFor("gracechurch");
+            
+            var response = await _sut.Execute(request, _logger).AsSlackResponse();
+
+            Assert.That(response.attachments.Single().image_url, Is.Not.Null);
+            Assert.That(response.attachments.Single().image_url, Does.Contain("HeatMap"));
+        }
+
+        [Test]
+        public void Execute_ErrorIsThrown_LogsAndRethrows()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _sut.Execute(null, _logger));
+
+            Assert.That(_logger.Entries.Count, Is.EqualTo(1));
         }
     }
 }

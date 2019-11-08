@@ -1,9 +1,10 @@
-﻿namespace WhereIs.CapacityMonitoring
+﻿using WhereIs.Infrastructure;
+
+namespace WhereIs.CapacityMonitoring
 {
     public interface ICapacityService
     {
-        int NumberOfDesksOccupiedForLocation(string location);
-        void CheckIn(string compoundKey);
-        void Reset();
+        int NumberOfDesksOccupiedForLocation(LocationFromRequest location);
+        void CheckIn(LocationFromRequest compoundKey);
     }
 }

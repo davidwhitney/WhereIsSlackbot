@@ -15,8 +15,7 @@ namespace WhereIs.ImageGeneration
 
         public byte[] GetImageFor(ImageLocation location)
         {
-            var map = Path.Combine(_config.MapPath, $"{location.Map}.png");
-            return HighlightAreaInImage(map, new[] {new Highlight(location, Rgba32.Red)});
+            return HighlightMap(location.Map, new[] {new Highlight(location, Rgba32.Red)});
         }
 
         public byte[] HighlightMap(string location, IEnumerable<Highlight> highlights)

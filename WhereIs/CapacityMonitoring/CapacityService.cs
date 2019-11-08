@@ -1,27 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using WhereIs.Infrastructure;
 
 namespace WhereIs.CapacityMonitoring
 {
     public class CapacityService : ICapacityService
     {
-        private readonly CapacityRepository _repo;
+        private readonly ICapacityRepository _repo;
 
-        public CapacityService(CapacityRepository repo)
+        public CapacityService(ICapacityRepository repo)
         {
             _repo = repo;
         }
 
-        public int NumberOfDesksOccupiedForLocation(string location)
+        public int NumberOfDesksOccupiedForLocation(LocationFromRequest location)
         {
             var state = _repo.Load();
-            var keysInThisRegion = state.Keys.Where(x => x.ToLower().StartsWith(location.ToLower()));
+            var keysInThisRegion = state.Keys.Where(x => x.ToLower().StartsWith(location.Value));
             return keysInThisRegion.Sum(key => state[key]);
         }
 
-        public void CheckIn(string compoundKey)
+        public void CheckIn(LocationFromRequest compoundKey)
         {
-            compoundKey = compoundKey.ToLower().Trim();
             var state = _repo.Load();
             if (!state.ContainsKey(compoundKey))
             {
@@ -31,11 +30,6 @@ namespace WhereIs.CapacityMonitoring
             state[compoundKey]++;
 
             _repo.Save(state);
-        }
-
-        public void Reset()
-        {
-            _repo.Save(new Dictionary<string, int> {{"__nothing__", 0}});
         }
     }
 }

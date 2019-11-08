@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
+using WhereIs.Infrastructure;
 using WhereIs.Slack;
 using IUrlHelper = WhereIs.Infrastructure.IUrlHelper;
 
@@ -34,16 +33,15 @@ namespace WhereIs
         {
             try
             {
-                var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var request = PayloadMapper.Map<SlackRequest>(requestBody);
-
+                var request = await req.ReadSlackRequest();
                 if (string.IsNullOrWhiteSpace(request.Text))
                 {
                     return SlackResponse.NoLocationProvided().AsJson();
                 }
 
-                var location = request.Text.ToLower().Trim();
-                var totalAvailableSeats = _locations.Where(x => x.Name.StartsWith(location)).Sum(x => x.Capacity);
+                var location = new LocationFromRequest(request.Text);
+
+                var totalAvailableSeats = _locations.TotalCapacityOf(location);
                 var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(location);
 
                 var result = $"There are {filledSeats} of {totalAvailableSeats} desks used in {request.Text}.";

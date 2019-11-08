@@ -7,18 +7,13 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
-using WhereIs.Infrastructure;
 
 namespace WhereIs.CapacityMonitoring
 {
-    public class CapacityRepository
+    public class CapacityRepository : ICapacityRepository
     {
         private readonly BlobContainerClient _storageClient;
-
-        public CapacityRepository(Configuration config)
-        {
-            _storageClient = new BlobContainerClient(config.BlobCredentials, "whereischeckins");
-        }
+        public CapacityRepository(BlobContainerClient client) => _storageClient = client;
 
         public Dictionary<string, int> Load()
         {
