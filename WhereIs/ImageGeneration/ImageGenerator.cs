@@ -58,12 +58,29 @@ namespace WhereIs.ImageGeneration
 
             xRange.RemoveAll(x => x < 0 || x > rawMap.Width);
             yRange.RemoveAll(y => y < 0 || y > rawMap.Height);
-
+            
             foreach (var x in xRange)
             {
                 foreach (var y in yRange)
                 {
-                    rawMap[x, y] = highlight.Colour;
+                    var existing = rawMap[x, y];
+
+                    var newR = highlight.Colour.R;
+                    var newG = highlight.Colour.G;
+                    var newB = highlight.Colour.B;
+
+                    if (existing != Rgba32.White)
+                    {
+                        var shade_factor = 0.55;
+
+                        newR = (byte) (newR * (1 - shade_factor));
+                        newG = (byte) (newG * (1 - shade_factor));
+                        newB = (byte) (newB * (1 - shade_factor));
+                    }
+
+                    var next = new Rgba32(newR, newG, newB, existing.A);
+
+                    rawMap[x, y] = next;
                 }
             }
         }
