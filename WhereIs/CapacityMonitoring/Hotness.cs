@@ -8,10 +8,10 @@ namespace WhereIs.CapacityMonitoring
     {
         public Hotness()
         {
-            Add(20, Rgba32.LightGreen);
-            Add(40, Rgba32.Green);
-            Add(60, Rgba32.Yellow);
-            Add(80, Rgba32.Orange);
+            Add(17, Rgba32.LightGreen);
+            Add(34, Rgba32.Green);
+            Add(50, Rgba32.Yellow);
+            Add(67, Rgba32.Orange);
             Add(100, Rgba32.Red);
         }
 
