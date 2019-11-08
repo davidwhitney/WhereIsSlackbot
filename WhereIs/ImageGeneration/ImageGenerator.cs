@@ -15,8 +15,7 @@ namespace WhereIs.ImageGeneration
 
         public byte[] GetImageFor(ImageLocation location)
         {
-            var map = Path.Combine(_config.MapPath, $"{location.Map}.png");
-            return HighlightAreaInImage(map, new[] {new Highlight(location, Rgba32.Red)});
+            return HighlightMap(location.Map, new[] {new Highlight(location, Rgba32.Red)});
         }
 
         public byte[] HighlightMap(string location, IEnumerable<Highlight> highlights)
@@ -49,6 +48,7 @@ namespace WhereIs.ImageGeneration
                 return outputBytes;
             }
         }
+
         private static void DrawHighlight(Highlight highlight, Image<Rgba32> rawMap)
         {
             const int sizeOfHighlight = 20;
@@ -58,7 +58,7 @@ namespace WhereIs.ImageGeneration
 
             xRange.RemoveAll(x => x < 0 || x > rawMap.Width);
             yRange.RemoveAll(y => y < 0 || y > rawMap.Height);
-
+            
             foreach (var x in xRange)
             {
                 foreach (var y in yRange)
@@ -73,9 +73,9 @@ namespace WhereIs.ImageGeneration
                     {
                         var shade_factor = 0.55;
 
-                        newR = (byte)(newR * (1 - shade_factor));
-                        newG = (byte)(newG * (1 - shade_factor));
-                        newB = (byte)(newB * (1 - shade_factor));
+                        newR = (byte) (newR * (1 - shade_factor));
+                        newG = (byte) (newG * (1 - shade_factor));
+                        newB = (byte) (newB * (1 - shade_factor));
                     }
 
                     var next = new Rgba32(newR, newG, newB, existing.A);

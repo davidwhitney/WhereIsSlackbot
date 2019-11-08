@@ -1,34 +1,37 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using WhereIs.CapacityMonitoring;
-using WhereIs.Infrastructure;
 
 namespace WhereIs.Test.Unit.CapacityMonitoring
 {
-    [TestFixture(Category = "Integration")]
+    [TestFixture]
     public class CapacityServiceTests
     {
         private CapacityService _sut;
+        private FakeCapacityRepo _repository;
 
         [SetUp]
         public void SetUp()
         {
-            var factory = new CapacityRepository(new Configuration
-            {
-                BlobCredentials = "DefaultEndpointsProtocol=https;AccountName=whereischeckins;AccountKey=c4l+Wsn1rGRZfTIL1i1SZdoXjoMtIpHdYCBH+vZGk5jki9YDBJn+XQfcp0HSazrNjOs+JyENOkQOLcjGxsw5/g==;EndpointSuffix=core.windows.net"
-            });
-
-            _sut = new CapacityService(factory);
+            _repository = new FakeCapacityRepo();
+            _sut = new CapacityService(_repository);
         }
 
         [Test]
         public void CheckIn_IncrementsNumberAgainstProvidedLocationKey()
         {
-            var before = _sut.NumberOfDesksOccupiedForLocation("gracechurch");
-
             _sut.CheckIn("gracechurch::245-210");
+
             var occupiedCount = _sut.NumberOfDesksOccupiedForLocation("gracechurch");
 
-            Assert.That(occupiedCount, Is.EqualTo(before + 1));
+            Assert.That(occupiedCount, Is.EqualTo(1));
         }
+    }
+
+    public class FakeCapacityRepo : ICapacityRepository
+    {
+        public Dictionary<string, int> Storage { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> Load() => Storage;
+        public void Save(Dictionary<string, int> state) => Storage = state;
     }
 }

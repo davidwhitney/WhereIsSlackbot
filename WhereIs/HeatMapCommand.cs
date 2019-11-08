@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp.PixelFormats;
 using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
 using WhereIs.ImageGeneration;
@@ -42,14 +41,7 @@ namespace WhereIs
 
                 var pointsOfInterest = _locations.Where(x => x.RawKey().StartsWith(mapKey + "::")).ToList();
 
-                var hotness = new Dictionary<int, Rgba32>
-                {
-                    { 20, Rgba32.LightGreen },
-                    { 40, Rgba32.Green },
-                    { 60, Rgba32.Yellow },
-                    { 80, Rgba32.Orange },
-                    { 100, Rgba32.Red },
-                };
+                var hotness = new Hotness();
 
                 var highlights = new List<Highlight>();
                 foreach (var poi in pointsOfInterest)
@@ -59,9 +51,7 @@ namespace WhereIs
                     var filledSeats = _capacityService.NumberOfDesksOccupiedForLocation(poi.RawKey());
                     var percentage = (filledSeats / totalAvailableSeats) * 100;
                     
-                    var colorGrade = percentage >= 100
-                        ? Rgba32.Red
-                        : hotness.FirstOrDefault(x => percentage <= x.Key).Value;
+                    var colorGrade = hotness.Rank(percentage);
 
                     highlights.Add(new Highlight(poi.ImageLocation, colorGrade));
                 }
@@ -76,6 +66,5 @@ namespace WhereIs
                 throw;
             }
         }
-
     }
 }

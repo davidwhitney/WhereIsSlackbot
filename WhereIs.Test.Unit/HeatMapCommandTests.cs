@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
-using WhereIs.CapacityMonitoring;
 using WhereIs.FindingPlaces;
-using WhereIs.ImageGeneration;
-using WhereIs.Infrastructure;
 using WhereIs.Test.Unit.Fakes;
 
 namespace WhereIs.Test.Unit
@@ -60,26 +57,6 @@ namespace WhereIs.Test.Unit
             var response = _sut.Execute(request, _logger).AsFile();
 
             Assert.That(response.FileContents, Is.EqualTo(_fakeGenerator.Returns));
-        }
-
-        [Test]
-        public void Blah_realthing()
-        {
-            var config = new Configuration
-            {
-                BlobCredentials =
-                    "DefaultEndpointsProtocol=https;AccountName=whereischeckins;AccountKey=c4l+Wsn1rGRZfTIL1i1SZdoXjoMtIpHdYCBH+vZGk5jki9YDBJn+XQfcp0HSazrNjOs+JyENOkQOLcjGxsw5/g==;EndpointSuffix=core.windows.net"
-            };
-            var repo = new LocationRepository(config.Root);
-            var locs = repo.Load();
-            var capRepo = new CapacityRepository(config);
-            var cap = new CapacityService(capRepo);
-            _sut = new HeatMapCommand(locs, new ImageGenerator(new Configuration()), _cache, cap);
-            var request = ExpectedRequests.MapRequestForKey("gracechurch");
-
-            var response = _sut.Execute(request, _logger).AsFile();
-
-            Assert.That(response.FileContents, Is.Not.Null);
         }
         
         [Test]

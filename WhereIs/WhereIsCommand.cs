@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +29,7 @@ namespace WhereIs
         {
             try
             {
-                var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var request = PayloadMapper.Map<SlackRequest>(requestBody);
-
+                var request = await req.ReadSlackRequest();
                 var result = _finder.Find(request.Text);
                 if (result.IsNotFound())
                 {
