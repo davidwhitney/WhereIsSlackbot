@@ -58,6 +58,6 @@ namespace WhereIs.CapacityMonitoring
             return blob;
         }
 
-        private static string SelectLogFile() => $"usage.{DateTime.UtcNow.ToShortDateString().Replace("/", "-")}.json";
+        private static string SelectLogFile() => $"usage.today.json";
     }
 }
